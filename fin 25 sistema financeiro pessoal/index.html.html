@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador Financeiro Pessoal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        /* Estilo para a seção expansível */
+        .collapsible-header {
+            cursor: pointer;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 15px;
+        }
+
+        .collapsible-header h2 {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin: 0;
+        }
+
+        .collapsible-header .arrow {
+            font-size: 1.5em;
+            transition: transform 0.3s;
+        }
+
+        .collapsible-content {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .collapsible-content.expanded {
+            max-height: 2000px; /* Um valor grande o suficiente para a expansão */
+        }
+
+
+        .dashboard {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            flex-grow: 1;
+            margin: 0 10px;
+        }
+
+        .positivo { color: #28a745; }
+        .negativo { color: #dc3545; }
+        .neutro { color: #007bff; }
+        .soma-negativa { color: #dc3545; }
+        .soma-positiva { color: #28a745; }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="date"],
+        .form-group select,
+        .form-group datalist {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .input-group input {
+            flex-grow: 1;
+        }
+
+        .input-group .add-btn {
+            margin-left: 10px;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .input-group .add-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn-primary { background-color: #007bff; color: white; }
+        .btn-secondary { background-color: #6c757d; color: white; }
+        .btn-danger { background-color: #dc3545; color: white; }
+        .btn-success { background-color: #28a745; color: white; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .filtro-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .radio-group label {
+            margin-right: 15px;
+        }
+
+        /* Cores das transações na tabela */
+        .transacao-receita td { color: #28a745; }
+        .transacao-despesa td { color: #dc3545; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Gerenciador Financeiro Pessoal</h1>
+
+    <section>
+        <h2>Dashboard</h2>
+        <div class="dashboard">
+            <div class="card">
+                <h3>Saldo Atual</h3>
+                <p id="saldoAtual" class="soma-neutra">R$ 0,00</p>
+            </div>
+            <div class="card">
+                <h3>Receitas do Mês</h3>
+                <p id="receitasMes" class="positivo">R$ 0,00</p>
+            </div>
+            <div class="card">
+                <h3>Despesas do Mês</h3>
+                <p id="despesasMes" class="negativo">R$ 0,00</p>
+            </div>
+        </div>
+        <div class="dashboard">
+            <div class="card">
+                <h3>Pendentes</h3>
+                <p id="pendentesCount" class="neutro">0</p>
+            </div>
+            <div class="card">
+                <h3>A Pagar</h3>
+                <p id="aPagarCount" class="neutro">0</p>
+            </div>
+            <div class="card">
+                <h3>Pagos/Recebidos</h3>
+                <p id="pagosRecebidosCount" class="neutro">0</p>
+            </div>
+        </div>
+    </section>
+    
+    <hr>
+
+    <section>
+        <div class="collapsible-header" onclick="toggleSection('novaTransacaoContent')">
+            <h2>Nova Transação</h2>
+            <span class="arrow">&#x25BC;</span>
+        </div>
+        <div id="novaTransacaoContent" class="collapsible-content expanded">
+            <div class="form-group">
+                <label for="dataTransacao">Data:</label>
+                <input type="date" id="dataTransacao">
+            </div>
+            <div class="form-group">
+                <label for="lojaTransacao">Loja/Estabelecimento:</label>
+                <div class="input-group">
+                    <input type="text" id="lojaTransacao" list="listaLojas" placeholder="Ex: Eletropaulo, Empresa X">
+                    <datalist id="listaLojas"></datalist>
+                    <button class="add-btn" onclick="cadastrarLoja()">+</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="descricaoTransacao">Descrição:</label>
+                <input type="text" id="descricaoTransacao" placeholder="Detalhes da compra/recebimento">
+            </div>
+            <div class="form-group">
+                <label for="tipoTransacao">Tipo:</label>
+                <select id="tipoTransacao" onchange="atualizarStatusPadrao(); carregarCategoriasESubcategorias()">
+                    <option value="despesa">Despesa</option>
+                    <option value="receita">Receita</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="categoriaTransacao">Categoria:</label>
+                <div class="input-group">
+                    <input type="text" id="categoriaTransacao" list="listaCategorias" placeholder="Ex: Moradia, Alimentação">
+                    <datalist id="listaCategorias"></datalist>
+                    <button class="add-btn" onclick="cadastrarCategoria()">+</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="subcategoriaTransacao">Subcategoria:</label>
+                <div class="input-group">
+                    <input type="text" id="subcategoriaTransacao" list="listaSubcategorias" placeholder="Ex: Energia, Supermercado">
+                    <datalist id="listaSubcategorias"></datalist>
+                    <button class="add-btn" onclick="cadastrarSubcategoria()">+</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="valorTransacao">Valor:</label>
+                <input type="number" id="valorTransacao" step="0.01" placeholder="R$ 0,00">
+            </div>
+            <div class="form-group">
+                <label for="parcelas">Número de Parcelas:</label>
+                <input type="number" id="parcelas" min="1" max="36" value="1">
+            </div>
+            <div class="form-group">
+                <label for="statusTransacao">Status:</label>
+                <select id="statusTransacao">
+                    <option value="A Pagar">A Pagar</option>
+                    <option value="Pendente">Pendente</option>
+                    <option value="Pago">Pago</option>
+                    <option value="Recebido">Recebido</option>
+                </select>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="salvarTransacao()">Salvar Transação</button>
+                <button class="btn btn-secondary" onclick="limparFormulario()">Limpar</button>
+            </div>
+        </div>
+    </section>
+
+    <hr>
+
+    <section>
+        <div class="collapsible-header" onclick="toggleSection('relatoriosContent')">
+            <h2>Relatórios</h2>
+            <span class="arrow">&#x25BC;</span>
+        </div>
+        <div id="relatoriosContent" class="collapsible-content expanded">
+            <div class="filtro-container">
+                <div class="form-group">
+                    <label for="filtroPeriodo">Período:</label>
+                    <select id="filtroPeriodo" onchange="toggleDateFilters()">
+                        <option value="mes">Este Mês</option>
+                        <option value="3meses">Últimos 3 Meses</option>
+                        <option value="6meses">Últimos 6 Meses</option>
+                        <option value="1ano">Último Ano</option>
+                        <option value="personalizado">Personalizado</option>
+                    </select>
+                </div>
+                <div class="form-group" id="filtroDataPersonalizada" style="display: none;">
+                    <label for="dataInicio">De:</label>
+                    <input type="date" id="dataInicio">
+                </div>
+                <div class="form-group" id="filtroDataPersonalizada2" style="display: none;">
+                    <label for="dataFim">Até:</label>
+                    <input type="date" id="dataFim">
+                </div>
+                <div class="form-group">
+                    <label for="filtroTipo">Tipo:</label>
+                    <select id="filtroTipo">
+                        <option value="">Todos</option>
+                        <option value="despesa">Despesa</option>
+                        <option value="receita">Receita</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filtroCategoria">Categoria:</label>
+                    <input type="text" id="filtroCategoria" list="listaCategoriasFiltro" placeholder="Ex: Alimentação">
+                    <datalist id="listaCategoriasFiltro"></datalist>
+                </div>
+                <div class="form-group">
+                    <label for="filtroBusca">Buscar por Descrição:</label>
+                    <input type="text" id="filtroBusca" placeholder="Palavra-chave...">
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="gerarRelatorio()">Gerar Relatório</button>
+            </div>
+
+            <div id="resumoRelatorio" style="margin-top: 20px;">
+                <h3>Soma do Relatório</h3>
+                <p>Total de Receitas: <span id="somaReceitas" class="positivo">R$ 0,00</span></p>
+                <p>Total de Despesas: <span id="somaDespesas" class="negativo">R$ 0,00</span></p>
+                <p>Saldo do Relatório: <span id="saldoRelatorio" class="soma-neutra">R$ 0,00</span></p>
+            </div>
+
+            <table id="tabelaRelatorio">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Descrição</th>
+                        <th>Tipo</th>
+                        <th>Categoria</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+    </section>
+
+    <hr>
+    
+    <section>
+        <div class="collapsible-header" onclick="toggleSection('configuracoesContent')">
+            <h2>Configurações</h2>
+            <span class="arrow">&#x25BC;</span>
+        </div>
+        <div id="configuracoesContent" class="collapsible-content">
+            <div class="form-group">
+                <label for="senhaReset">Senha de Reset:</label>
+                <input type="password" id="senhaReset">
+            </div>
+            <button class="btn btn-danger" onclick="resetarDados()">Resetar Dados</button>
+        </div>
+    </section>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        atualizarDashboard();
+        carregarLojas();
+        carregarCategoriasESubcategorias();
+        gerarRelatorio();
+    });
+
+    const PASS_RESET = '123456';
+
+    function toggleSection(id) {
+        const content = document.getElementById(id);
+        const arrow = content.previousElementSibling.querySelector('.arrow');
+        content.classList.toggle('expanded');
+        if (content.classList.contains('expanded')) {
+            arrow.style.transform = 'rotate(180deg)';
+        } else {
+            arrow.style.transform = 'rotate(0deg)';
+        }
+    }
+
+    function getTransacoes() {
+        return JSON.parse(localStorage.getItem('transacoes')) || [];
+    }
+
+    function salvarTransacoes(transacoes) {
+        localStorage.setItem('transacoes', JSON.stringify(transacoes));
+    }
+
+    function getLojas() {
+        return JSON.parse(localStorage.getItem('lojas')) || [];
+    }
+
+    function salvarLojas(lojas) {
+        localStorage.setItem('lojas', JSON.stringify(lojas));
+    }
+
+    function getCategorias() {
+        return JSON.parse(localStorage.getItem('categorias')) || { despesa: [], receita: [] };
+    }
+
+    function salvarCategorias(categorias) {
+        localStorage.setItem('categorias', JSON.stringify(categorias));
+    }
+
+    function getSubcategorias() {
+        return JSON.parse(localStorage.getItem('subcategorias')) || { despesa: {}, receita: {} };
+    }
+
+    function salvarSubcategorias(subcategorias) {
+        localStorage.setItem('subcategorias', JSON.stringify(subcategorias));
+    }
+
+    function confirmAction(message) {
+        return confirm(message);
+    }
+
+    function atualizarStatusPadrao() {
+        const tipo = document.getElementById('tipoTransacao').value;
+        const statusSelect = document.getElementById('statusTransacao');
+        if (tipo === 'despesa') {
+            statusSelect.value = 'A Pagar';
+        } else {
+            statusSelect.value = 'Pendente';
+        }
+    }
+
+    function carregarLojas() {
+        const lojas = getLojas();
+        const datalistLojas = document.getElementById('listaLojas');
+        datalistLojas.innerHTML = '';
+        lojas.forEach(loja => {
+            const option = document.createElement('option');
+            option.value = loja;
+            datalistLojas.appendChild(option);
+        });
+    }
+
+    function cadastrarLoja() {
+        const loja = document.getElementById('lojaTransacao').value.trim();
+        if (loja === '') {
+            alert('Por favor, digite o nome da Loja/Estabelecimento para cadastrar.');
+            return;
+        }
+
+        const lojas = getLojas();
+        if (lojas.includes(loja)) {
+            alert('Esta loja já está cadastrada.');
+            return;
+        }
+        
+        if (!confirmAction(`Deseja cadastrar a loja "${loja}" para uso recorrente?`)) {
+            return;
+        }
+
+        lojas.push(loja);
+        salvarLojas(lojas);
+        carregarLojas();
+        alert('Loja cadastrada com sucesso!');
+    }
+
+    function carregarCategoriasESubcategorias() {
+        const tipoSelecionado = document.getElementById('tipoTransacao').value;
+        const categoriasData = getCategorias();
+        const subcategoriasData = getSubcategorias();
+
+        const datalistCategorias = document.getElementById('listaCategorias');
+        const datalistSubcategorias = document.getElementById('listaSubcategorias');
+        const datalistCategoriasFiltro = document.getElementById('listaCategoriasFiltro');
+
+        // Limpa as listas de sugestão
+        datalistCategorias.innerHTML = '';
+        datalistSubcategorias.innerHTML = '';
+        datalistCategoriasFiltro.innerHTML = '';
+
+        // Carrega categorias de todos os tipos para o filtro de relatório
+        const todasCategorias = [...new Set([...(categoriasData.despesa || []), ...(categoriasData.receita || [])])];
+        todasCategorias.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            datalistCategoriasFiltro.appendChild(option);
+        });
+
+        // Carrega categorias para o formulário de cadastro baseadas no tipo selecionado
+        const categoriasDoTipo = categoriasData[tipoSelecionado] || [];
+        categoriasDoTipo.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            datalistCategorias.appendChild(option);
+        });
+        
+        // As subcategorias dependem da categoria selecionada, então este campo será preenchido dinamicamente
+        document.getElementById('categoriaTransacao').oninput = function() {
+            const categoriaSelecionada = this.value;
+            const subcategoriasDoTipoEcategoria = subcategoriasData[tipoSelecionado][categoriaSelecionada] || [];
+            datalistSubcategorias.innerHTML = '';
+            subcategoriasDoTipoEcategoria.forEach(sub => {
+                const option = document.createElement('option');
+                option.value = sub;
+                datalistSubcategorias.appendChild(option);
+            });
+        };
+    }
+
+    function cadastrarCategoria() {
+        const categoria = document.getElementById('categoriaTransacao').value.trim();
+        if (categoria === '') {
+            alert('Por favor, digite o nome da Categoria para cadastrar.');
+            return;
+        }
+
+        const tipo = document.getElementById('tipoTransacao').value;
+        const categoriasData = getCategorias();
+        
+        if (categoriasData[tipo].includes(categoria)) {
+            alert('Esta categoria já está cadastrada para este tipo de transação.');
+            return;
+        }
+
+        if (!confirmAction(`Deseja cadastrar a categoria "${categoria}" para "${tipo}"?`)) {
+            return;
+        }
+
+        categoriasData[tipo].push(categoria);
+        salvarCategorias(categoriasData);
+        carregarCategoriasESubcategorias();
+        alert('Categoria cadastrada com sucesso!');
+    }
+
+    function cadastrarSubcategoria() {
+        const categoria = document.getElementById('categoriaTransacao').value.trim();
+        const subcategoria = document.getElementById('subcategoriaTransacao').value.trim();
+        if (categoria === '') {
+            alert('Selecione ou cadastre uma Categoria primeiro.');
+            return;
+        }
+        if (subcategoria === '') {
+            alert('Por favor, digite o nome da Subcategoria para cadastrar.');
+            return;
+        }
+
+        const tipo = document.getElementById('tipoTransacao').value;
+        const subcategoriasData = getSubcategorias();
+        
+        if (!subcategoriasData[tipo][categoria]) {
+            subcategoriasData[tipo][categoria] = [];
+        }
+
+        if (subcategoriasData[tipo][categoria].includes(subcategoria)) {
+            alert('Esta subcategoria já está cadastrada para esta categoria.');
+            return;
+        }
+
+        if (!confirmAction(`Deseja cadastrar a subcategoria "${subcategoria}" para a categoria "${categoria}"?`)) {
+            return;
+        }
+
+        subcategoriasData[tipo][categoria].push(subcategoria);
+        salvarSubcategorias(subcategoriasData);
+        carregarCategoriasESubcategorias();
+        alert('Subcategoria cadastrada com sucesso!');
+    }
+
+    function atualizarDashboard() {
+        const transacoes = getTransacoes();
+        const dataAtual = new Date();
+        const mesAtual = dataAtual.getMonth() + 1;
+        const anoAtual = dataAtual.getFullYear();
+
+        let receitasMes = 0;
+        let despesasMes = 0;
+        let pendentesCount = 0;
+        let aPagarCount = 0;
+        let pagosRecebidosCount = 0;
+        let saldoAtual = 0;
+
+        transacoes.forEach(transacao => {
+            const transacaoDate = new Date(transacao.data + 'T00:00:00');
+            
+            // Cálculos para o saldo atual (apenas transações pagas/recebidas)
+            if (transacao.status === 'Recebido') {
+                saldoAtual += transacao.valor;
+            } else if (transacao.status === 'Pago') {
+                saldoAtual -= transacao.valor;
+            }
+
+            // Cálculos para o dashboard do mês atual (apenas transações pagas/recebidas no mês)
+            if (transacaoDate.getMonth() + 1 === mesAtual && transacaoDate.getFullYear() === anoAtual) {
+                if (transacao.status === 'Recebido') {
+                    receitasMes += transacao.valor;
+                } else if (transacao.status === 'Pago') {
+                    despesasMes += transacao.valor;
+                }
+            }
+            
+            // Contagem de status
+            if (transacao.status === 'Pendente') pendentesCount++;
+            if (transacao.status === 'A Pagar') aPagarCount++;
+            if (transacao.status === 'Pago' || transacao.status === 'Recebido') pagosRecebidosCount++;
+        });
+
+        document.getElementById('saldoAtual').textContent = `R$ ${saldoAtual.toFixed(2)}`;
+        document.getElementById('saldoAtual').classList.remove('soma-positiva', 'soma-negativa');
+        if (saldoAtual >= 0) {
+            document.getElementById('saldoAtual').classList.add('soma-positiva');
+        } else {
+            document.getElementById('saldoAtual').classList.add('soma-negativa');
+        }
+
+        document.getElementById('receitasMes').textContent = `R$ ${receitasMes.toFixed(2)}`;
+        document.getElementById('despesasMes').textContent = `R$ ${despesasMes.toFixed(2)}`;
+        document.getElementById('pendentesCount').textContent = pendentesCount;
+        document.getElementById('aPagarCount').textContent = aPagarCount;
+        document.getElementById('pagosRecebidosCount').textContent = pagosRecebidosCount;
+    }
+
+    function salvarTransacao() {
+        const tipo = document.getElementById('tipoTransacao').value;
+        const data = document.getElementById('dataTransacao').value;
+        const loja = document.getElementById('lojaTransacao').value;
+        const descricao = document.getElementById('descricaoTransacao').value;
+        const categoria = document.getElementById('categoriaTransacao').value;
+        const subcategoria = document.getElementById('subcategoriaTransacao').value;
+        const valor = parseFloat(document.getElementById('valorTransacao').value);
+        const parcelas = parseInt(document.getElementById('parcelas').value);
+        let status = document.getElementById('statusTransacao').value;
+
+        if (!data || !loja || !valor) {
+            alert('Por favor, preencha a data, a loja e o valor.');
+            return;
+        }
+
+        if (!confirmAction('Deseja realmente salvar esta transação?')) {
+            return;
+        }
+
+        let transacoes = getTransacoes();
+        
+        // Se for parcelado, cria múltiplas transações
+        if (parcelas > 1) {
+            const valorParcela = valor / parcelas;
+            let dataVencimento = new Date(data);
+
+            for (let i = 0; i < parcelas; i++) {
+                const novaParcela = {
+                    id: Date.now() + i,
+                    tipo,
+                    data: dataVencimento.toISOString().slice(0, 10),
+                    loja,
+                    descricao,
+                    categoria,
+                    subcategoria,
+                    valor: valorParcela,
+                    status: 'A Pagar' // Parcelas sempre começam como 'A Pagar'
+                };
+                transacoes.push(novaParcela);
+                dataVencimento.setMonth(dataVencimento.getMonth() + 1);
+            }
+        } else {
+            // Se for uma transação única
+            const novaTransacao = {
+                id: Date.now(),
+                tipo,
+                data,
+                loja,
+                descricao,
+                categoria,
+                subcategoria,
+                valor,
+                status
+            };
+            transacoes.push(novaTransacao);
+        }
+
+        salvarTransacoes(transacoes);
+        limparFormulario();
+        atualizarDashboard();
+        gerarRelatorio();
+        carregarLojas();
+        carregarCategoriasESubcategorias(); // Recarrega as listas de sugestões
+        alert('Transação(ões) salva(s) com sucesso!');
+    }
+
+    function limparFormulario() {
+        document.getElementById('dataTransacao').value = '';
+        document.getElementById('lojaTransacao').value = '';
+        document.getElementById('descricaoTransacao').value = '';
+        document.getElementById('categoriaTransacao').value = '';
+        document.getElementById('subcategoriaTransacao').value = '';
+        document.getElementById('valorTransacao').value = '';
+        document.getElementById('parcelas').value = 1;
+        document.getElementById('tipoTransacao').value = 'despesa'; // Volta para o padrão
+        atualizarStatusPadrao(); // Atualiza o status
+    }
+
+    function toggleDateFilters() {
+        const periodo = document.getElementById('filtroPeriodo').value;
+        const dataPersonalizada = document.getElementById('filtroDataPersonalizada');
+        const dataPersonalizada2 = document.getElementById('filtroDataPersonalizada2');
+        if (periodo === 'personalizado') {
+            dataPersonalizada.style.display = 'block';
+            dataPersonalizada2.style.display = 'block';
+        } else {
+            dataPersonalizada.style.display = 'none';
+            dataPersonalizada2.style.display = 'none';
+        }
+    }
+
+    function gerarRelatorio() {
+        const transacoes = getTransacoes();
+        const filtroPeriodo = document.getElementById('filtroPeriodo').value;
+        const filtroTipo = document.getElementById('filtroTipo').value;
+        const filtroCategoria = document.getElementById('filtroCategoria').value.toLowerCase();
+        const filtroBusca = document.getElementById('filtroBusca').value.toLowerCase();
+        const dataInicio = document.getElementById('dataInicio').value;
+        const dataFim = document.getElementById('dataFim').value;
+        const tabelaBody = document.querySelector('#tabelaRelatorio tbody');
+        tabelaBody.innerHTML = '';
+        
+        let somaReceitas = 0;
+        let somaDespesas = 0;
+
+        const transacoesFiltradas = transacoes.filter(transacao => {
+            const transacaoDate = new Date(transacao.data + 'T00:00:00');
+            const hoje = new Date();
+            let dataLimiteInicio, dataLimiteFim;
+
+            if (filtroPeriodo === 'mes') {
+                dataLimiteInicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+                dataLimiteFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+            } else if (filtroPeriodo === '3meses') {
+                dataLimiteInicio = new Date(hoje.getFullYear(), hoje.getMonth() - 2, 1);
+                dataLimiteFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+            } else if (filtroPeriodo === '6meses') {
+                dataLimiteInicio = new Date(hoje.getFullYear(), hoje.getMonth() - 5, 1);
+                dataLimiteFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+            } else if (filtroPeriodo === '1ano') {
+                dataLimiteInicio = new Date(hoje.getFullYear() - 1, hoje.getMonth(), hoje.getDate());
+                dataLimiteFim = hoje;
+            } else if (filtroPeriodo === 'personalizado' && dataInicio && dataFim) {
+                dataLimiteInicio = new Date(dataInicio);
+                dataLimiteFim = new Date(dataFim);
+            }
+            
+            const matchPeriodo = !filtroPeriodo || (transacaoDate >= dataLimiteInicio && transacaoDate <= dataLimiteFim);
+            const matchTipo = !filtroTipo || transacao.tipo === filtroTipo;
+            const matchCategoria = !filtroCategoria || (transacao.categoria && transacao.categoria.toLowerCase().includes(filtroCategoria));
+            const matchBusca = !filtroBusca || (transacao.descricao && transacao.descricao.toLowerCase().includes(filtroBusca));
+
+            return matchPeriodo && matchTipo && matchCategoria && matchBusca;
+        });
+
+        transacoesFiltradas.forEach(transacao => {
+            if (transacao.status === 'Recebido') {
+                somaReceitas += transacao.valor;
+            } else if (transacao.status === 'Pago') {
+                somaDespesas += transacao.valor;
+            }
+
+            const newRow = tabelaBody.insertRow();
+            newRow.classList.add(transacao.tipo === 'receita' ? 'transacao-receita' : 'transacao-despesa');
+            
+            newRow.insertCell(0).textContent = transacao.data;
+            newRow.insertCell(1).textContent = transacao.descricao;
+            newRow.insertCell(2).textContent = transacao.tipo;
+            newRow.insertCell(3).textContent = transacao.categoria;
+            newRow.insertCell(4).textContent = `R$ ${transacao.valor.toFixed(2)}`;
+            newRow.insertCell(5).textContent = transacao.status;
+
+            const acoesCell = newRow.insertCell(6);
+            const statusSelect = document.createElement('select');
+            statusSelect.innerHTML = `
+                <option value="Pendente" ${transacao.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
+                <option value="A Pagar" ${transacao.status === 'A Pagar' ? 'selected' : ''}>A Pagar</option>
+                <option value="Pago" ${transacao.status === 'Pago' ? 'selected' : ''}>Pago</option>
+                <option value="Recebido" ${transacao.status === 'Recebido' ? 'selected' : ''}>Recebido</option>
+            `;
+            statusSelect.onchange = (e) => alterarStatus(transacao.id, e.target.value);
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = 'X';
+            deleteBtn.classList.add('btn', 'btn-danger');
+            deleteBtn.onclick = () => excluirTransacao(transacao.id);
+
+            acoesCell.appendChild(statusSelect);
+            acoesCell.appendChild(deleteBtn);
+        });
+
+        document.getElementById('somaReceitas').textContent = `R$ ${somaReceitas.toFixed(2)}`;
+        document.getElementById('somaDespesas').textContent = `R$ ${somaDespesas.toFixed(2)}`;
+        const saldoRelatorio = somaReceitas - somaDespesas;
+        document.getElementById('saldoRelatorio').textContent = `R$ ${saldoRelatorio.toFixed(2)}`;
+        document.getElementById('saldoRelatorio').classList.remove('soma-positiva', 'soma-negativa');
+        if (saldoRelatorio >= 0) {
+            document.getElementById('saldoRelatorio').classList.add('soma-positiva');
+        } else {
+            document.getElementById('saldoRelatorio').classList.add('soma-negativa');
+        }
+    }
+
+    function alterarStatus(id, newStatus) {
+        if (!confirmAction('Deseja realmente alterar o status desta transação?')) {
+            return;
+        }
+
+        let transacoes = getTransacoes();
+        const transacao = transacoes.find(t => t.id === id);
+        if (transacao) {
+            transacao.status = newStatus;
+            salvarTransacoes(transacoes);
+            atualizarDashboard();
+            gerarRelatorio();
+            alert('Status alterado com sucesso!');
+        }
+    }
+
+    function excluirTransacao(id) {
+        if (!confirmAction('Tem certeza que deseja apagar esta transação?')) {
+            return;
+        }
+
+        let transacoes = getTransacoes();
+        transacoes = transacoes.filter(t => t.id !== id);
+        salvarTransacoes(transacoes);
+        atualizarDashboard();
+        gerarRelatorio();
+        alert('Transação excluída com sucesso!');
+    }
+
+    function resetarDados() {
+        const senha = document.getElementById('senhaReset').value;
+        if (senha === PASS_RESET) {
+            if (confirmAction('ATENÇÃO: Isso irá apagar TODOS os seus dados. Tem certeza?')) {
+                localStorage.removeItem('transacoes');
+                localStorage.removeItem('lojas');
+                localStorage.removeItem('categorias');
+                localStorage.removeItem('subcategorias');
+                alert('Dados resetados com sucesso!');
+                atualizarDashboard();
+                carregarLojas();
+                carregarCategoriasESubcategorias();
+                gerarRelatorio();
+            }
+        } else {
+            alert('Senha incorreta!');
+        }
+    }
+</script>
+
+</body>
+</html>
