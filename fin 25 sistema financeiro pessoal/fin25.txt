@@ -28,6 +28,163 @@
             padding-bottom: 10px;
         }
         
+        /* Estilos do Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 colunas em telas grandes */
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .dashboard-row-2 {
+            grid-template-columns: repeat(3, 1fr); /* 3 colunas para a segunda linha também */
+        }
+
+        .card {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .card h3 {
+            font-size: 0.9em;
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+        .card p {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .positivo { color: #28a745; }
+        .negativo { color: #dc3545; }
+        .neutro { color: #007bff; }
+        .soma-negativa { color: #dc3545; }
+        .soma-positiva { color: #28a745; }
+        
+        /* Estilos para Formulário */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="date"],
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Garante que padding e borda sejam incluídos na largura */
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .input-group input {
+            flex-grow: 1;
+        }
+
+        .input-group .add-btn {
+            margin-left: 10px;
+            width: 40px;
+            height: 40px;
+            font-size: 20px; /* Reduzido para celular */
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            flex-shrink: 0; /* Não permite que o botão diminua */
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column; /* Botões um abaixo do outro em telas menores */
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            width: 100%; /* Ocupa a largura total em telas menores */
+        }
+        
+        /* Estilos de Tabela */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em; /* Reduz o tamanho da fonte para melhor visualização em mobile */
+            display: block; /* Permite scroll horizontal em mobile */
+            overflow-x: auto;
+            white-space: nowrap; /* Impede que o conteúdo da célula quebre */
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px; /* Reduz o padding para mobile */
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* Estilos de Filtro */
+        .filtro-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Mais compacto para mobile */
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* Media Queries para Responsividade */
+        @media (min-width: 600px) {
+            /* Telas maiores (tablets) */
+            .dashboard {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .dashboard-row-2 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .card p {
+                font-size: 1.5em;
+            }
+            .button-group {
+                flex-direction: row; /* Volta a alinhar em linha */
+            }
+            .btn {
+                width: auto;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            /* Telas de desktop */
+            .dashboard {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .dashboard-row-2 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
         /* Estilo para a seção expansível */
         .collapsible-header {
             cursor: pointer;
@@ -56,125 +213,13 @@
             transition: max-height 0.5s ease-in-out;
         }
         .collapsible-content.expanded {
-            max-height: 2000px; /* Um valor grande o suficiente para a expansão */
-        }
-
-
-        .dashboard {
-            display: flex;
-            justify-content: space-around;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            background-color: #f8f8f8;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            flex-grow: 1;
-            margin: 0 10px;
-        }
-
-        .positivo { color: #28a745; }
-        .negativo { color: #dc3545; }
-        .neutro { color: #007bff; }
-        .soma-negativa { color: #dc3545; }
-        .soma-positiva { color: #28a745; }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .form-group input[type="text"],
-        .form-group input[type="number"],
-        .form-group input[type="date"],
-        .form-group select,
-        .form-group datalist {
-            width: calc(100% - 22px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        .input-group {
-            display: flex;
-            align-items: center;
-        }
-
-        .input-group input {
-            flex-grow: 1;
-        }
-
-        .input-group .add-btn {
-            margin-left: 10px;
-            width: 40px;
-            height: 40px;
-            font-size: 24px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .input-group .add-btn:hover {
-            background-color: #0056b3;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
+            max-height: 4000px; /* Um valor grande o suficiente para a expansão */
         }
 
         .btn-primary { background-color: #007bff; color: white; }
         .btn-secondary { background-color: #6c757d; color: white; }
         .btn-danger { background-color: #dc3545; color: white; }
         .btn-success { background-color: #28a745; color: white; }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            text-align: left;
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-
-        .filtro-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .radio-group label {
-            margin-right: 15px;
-        }
 
         /* Cores das transações na tabela */
         .transacao-receita td { color: #28a745; }
@@ -202,7 +247,7 @@
                 <p id="despesasMes" class="negativo">R$ 0,00</p>
             </div>
         </div>
-        <div class="dashboard">
+        <div class="dashboard dashboard-row-2">
             <div class="card">
                 <h3>Pendentes</h3>
                 <p id="pendentesCount" class="neutro">0</p>
@@ -382,6 +427,10 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // Define a data atual como padrão para o campo de data
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('dataTransacao').value = today;
+        
         atualizarDashboard();
         carregarLojas();
         carregarCategoriasESubcategorias();
@@ -522,6 +571,8 @@
                 datalistSubcategorias.appendChild(option);
             });
         };
+        // Garante que se o usuário mudar o tipo, a lista de subcategorias é limpa
+        document.getElementById('subcategoriaTransacao').value = '';
     }
 
     function cadastrarCategoria() {
@@ -651,6 +702,10 @@
             alert('Por favor, preencha a data, a loja e o valor.');
             return;
         }
+        if (valor <= 0) {
+             alert('O valor deve ser maior que zero.');
+            return;
+        }
 
         if (!confirmAction('Deseja realmente salvar esta transação?')) {
             return;
@@ -661,7 +716,7 @@
         // Se for parcelado, cria múltiplas transações
         if (parcelas > 1) {
             const valorParcela = valor / parcelas;
-            let dataVencimento = new Date(data);
+            let dataVencimento = new Date(data + 'T00:00:00'); // Garante que a data é tratada corretamente
 
             for (let i = 0; i < parcelas; i++) {
                 const novaParcela = {
@@ -669,11 +724,11 @@
                     tipo,
                     data: dataVencimento.toISOString().slice(0, 10),
                     loja,
-                    descricao,
+                    descricao: `${descricao} (${i + 1}/${parcelas})`, // Adiciona o número da parcela na descrição
                     categoria,
                     subcategoria,
                     valor: valorParcela,
-                    status: 'A Pagar' // Parcelas sempre começam como 'A Pagar'
+                    status: (tipo === 'despesa') ? 'A Pagar' : 'Pendente' // Define status padrão
                 };
                 transacoes.push(novaParcela);
                 dataVencimento.setMonth(dataVencimento.getMonth() + 1);
@@ -704,7 +759,10 @@
     }
 
     function limparFormulario() {
-        document.getElementById('dataTransacao').value = '';
+        // Define a data atual como padrão
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('dataTransacao').value = today;
+        
         document.getElementById('lojaTransacao').value = '';
         document.getElementById('descricaoTransacao').value = '';
         document.getElementById('categoriaTransacao').value = '';
@@ -734,40 +792,52 @@
         const filtroTipo = document.getElementById('filtroTipo').value;
         const filtroCategoria = document.getElementById('filtroCategoria').value.toLowerCase();
         const filtroBusca = document.getElementById('filtroBusca').value.toLowerCase();
-        const dataInicio = document.getElementById('dataInicio').value;
-        const dataFim = document.getElementById('dataFim').value;
+        const dataInicioStr = document.getElementById('dataInicio').value;
+        const dataFimStr = document.getElementById('dataFim').value;
         const tabelaBody = document.querySelector('#tabelaRelatorio tbody');
         tabelaBody.innerHTML = '';
         
         let somaReceitas = 0;
         let somaDespesas = 0;
 
+        let dataLimiteInicio, dataLimiteFim;
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0); // Zera a hora para comparação
+
+        if (filtroPeriodo === 'mes') {
+            dataLimiteInicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+            dataLimiteFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+        } else if (filtroPeriodo === '3meses') {
+            dataLimiteInicio = new Date(hoje.getFullYear(), hoje.getMonth() - 2, 1);
+            dataLimiteFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+        } else if (filtroPeriodo === '6meses') {
+            dataLimiteInicio = new Date(hoje.getFullYear(), hoje.getMonth() - 5, 1);
+            dataLimiteFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+        } else if (filtroPeriodo === '1ano') {
+            dataLimiteInicio = new Date(hoje.getFullYear() - 1, hoje.getMonth(), hoje.getDate());
+            dataLimiteFim = hoje;
+        } else if (filtroPeriodo === 'personalizado' && dataInicioStr && dataFimStr) {
+            dataLimiteInicio = new Date(dataInicioStr + 'T00:00:00');
+            dataLimiteFim = new Date(dataFimStr + 'T00:00:00');
+        }
+
         const transacoesFiltradas = transacoes.filter(transacao => {
             const transacaoDate = new Date(transacao.data + 'T00:00:00');
-            const hoje = new Date();
-            let dataLimiteInicio, dataLimiteFim;
-
-            if (filtroPeriodo === 'mes') {
-                dataLimiteInicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-                dataLimiteFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
-            } else if (filtroPeriodo === '3meses') {
-                dataLimiteInicio = new Date(hoje.getFullYear(), hoje.getMonth() - 2, 1);
-                dataLimiteFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
-            } else if (filtroPeriodo === '6meses') {
-                dataLimiteInicio = new Date(hoje.getFullYear(), hoje.getMonth() - 5, 1);
-                dataLimiteFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
-            } else if (filtroPeriodo === '1ano') {
-                dataLimiteInicio = new Date(hoje.getFullYear() - 1, hoje.getMonth(), hoje.getDate());
-                dataLimiteFim = hoje;
-            } else if (filtroPeriodo === 'personalizado' && dataInicio && dataFim) {
-                dataLimiteInicio = new Date(dataInicio);
-                dataLimiteFim = new Date(dataFim);
-            }
             
-            const matchPeriodo = !filtroPeriodo || (transacaoDate >= dataLimiteInicio && transacaoDate <= dataLimiteFim);
+            let matchPeriodo = true;
+            if (filtroPeriodo !== '') {
+                // Adiciona um dia à data limite final para incluir o dia inteiro no filtro
+                let dataFimInclusiva = new Date(dataLimiteFim);
+                if (dataFimInclusiva.getDate() === dataLimiteFim.getDate()) {
+                    dataFimInclusiva.setDate(dataFimInclusiva.getDate() + 1);
+                }
+
+                matchPeriodo = transacaoDate >= dataLimiteInicio && transacaoDate < dataFimInclusiva;
+            }
+
             const matchTipo = !filtroTipo || transacao.tipo === filtroTipo;
             const matchCategoria = !filtroCategoria || (transacao.categoria && transacao.categoria.toLowerCase().includes(filtroCategoria));
-            const matchBusca = !filtroBusca || (transacao.descricao && transacao.descricao.toLowerCase().includes(filtroBusca));
+            const matchBusca = !filtroBusca || (transacao.descricao && transacao.descricao.toLowerCase().includes(filtroBusca)) || (transacao.loja && transacao.loja.toLowerCase().includes(filtroBusca));
 
             return matchPeriodo && matchTipo && matchCategoria && matchBusca;
         });
@@ -790,6 +860,8 @@
             newRow.insertCell(5).textContent = transacao.status;
 
             const acoesCell = newRow.insertCell(6);
+            
+            // Criar o campo de seleção de status
             const statusSelect = document.createElement('select');
             statusSelect.innerHTML = `
                 <option value="Pendente" ${transacao.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
@@ -798,11 +870,15 @@
                 <option value="Recebido" ${transacao.status === 'Recebido' ? 'selected' : ''}>Recebido</option>
             `;
             statusSelect.onchange = (e) => alterarStatus(transacao.id, e.target.value);
-
+            statusSelect.classList.add('btn'); // Adiciona classe para estilo (opcional)
+            statusSelect.style.marginRight = '5px';
+            
+            // Criar o botão de exclusão
             const deleteBtn = document.createElement('button');
             deleteBtn.textContent = 'X';
             deleteBtn.classList.add('btn', 'btn-danger');
             deleteBtn.onclick = () => excluirTransacao(transacao.id);
+            deleteBtn.style.padding = '5px 10px'; // Estilo mais compacto
 
             acoesCell.appendChild(statusSelect);
             acoesCell.appendChild(deleteBtn);
@@ -812,11 +888,13 @@
         document.getElementById('somaDespesas').textContent = `R$ ${somaDespesas.toFixed(2)}`;
         const saldoRelatorio = somaReceitas - somaDespesas;
         document.getElementById('saldoRelatorio').textContent = `R$ ${saldoRelatorio.toFixed(2)}`;
-        document.getElementById('saldoRelatorio').classList.remove('soma-positiva', 'soma-negativa');
-        if (saldoRelatorio >= 0) {
+        document.getElementById('saldoRelatorio').classList.remove('soma-positiva', 'soma-negativa', 'soma-neutra');
+        if (saldoRelatorio > 0) {
             document.getElementById('saldoRelatorio').classList.add('soma-positiva');
-        } else {
+        } else if (saldoRelatorio < 0) {
             document.getElementById('saldoRelatorio').classList.add('soma-negativa');
+        } else {
+             document.getElementById('saldoRelatorio').classList.add('soma-neutra');
         }
     }
 
@@ -852,7 +930,7 @@
     function resetarDados() {
         const senha = document.getElementById('senhaReset').value;
         if (senha === PASS_RESET) {
-            if (confirmAction('ATENÇÃO: Isso irá apagar TODOS os seus dados. Tem certeza?')) {
+            if (confirmAction('ATENÇÃO: Isso irá apagar TODOS os seus dados (transações, lojas, categorias). Tem certeza?')) {
                 localStorage.removeItem('transacoes');
                 localStorage.removeItem('lojas');
                 localStorage.removeItem('categorias');
