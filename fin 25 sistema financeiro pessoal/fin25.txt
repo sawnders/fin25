@@ -256,26 +256,17 @@
             background-color: #f2f2f2;
         }
 
-        /* --- STATUS COLORS (CORRIGIDAS) --- */
         .status-vencido {
-            background-color: #ffcccc; /* Vermelho claro */
-            color: #dc3545; /* Vermelho escuro */
+            background-color: #ffcccc; 
+            color: #000000;
             font-weight: bold;
         }
         
         .status-pendente {
-            background-color: #fff3cd; /* Amarelo/Laranja claro */
-            color: #856404; /* Amarelo/Laranja escuro */
+            background-color: #fff3cd; 
+            color: #856404;
             font-weight: bold;
         }
-
-        .status-concluido {
-            background-color: #d4edda; /* Verde claro */
-            color: #155724; /* Verde escuro */
-            font-weight: bold;
-        }
-        /* --- FIM STATUS COLORS --- */
-
 
         /* --- MODAL (CONFIGURAÇÕES E DETALHES) --- */
         .modal {
@@ -476,13 +467,15 @@
             <div class="form-row">
                  <div>
                     <label for="categoriaTransacao">Categoria <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.8em; margin-left: 5px;" onclick="abrirModalCategorias()">+</button></label>
-                    <input type="text" id="categoriaTransacao" list="listaCategorias" onchange="carregarSubcategoriasPorCategoria()" autocomplete="off" required>
-                    <datalist id="listaCategorias"></datalist>
+                    <select id="categoriaTransacao" onchange="carregarSubcategoriasPorCategoria()" required>
+                        <option value="">Selecione uma categoria</option>
+                    </select>
                 </div>
                 <div>
                     <label for="subcategoriaTransacao">Subcategoria (Opcional)</label>
-                    <input type="text" id="subcategoriaTransacao" list="listaSubcategorias" autocomplete="off">
-                    <datalist id="listaSubcategorias"></datalist>
+                    <select id="subcategoriaTransacao">
+                        <option value="">Selecione uma subcategoria</option>
+                    </select>
                 </div>
             </div>
 
@@ -533,8 +526,9 @@
                 </div>
                 <div>
                     <label for="filtroCategoria">Categoria</label>
-                    <input type="text" id="filtroCategoria" list="listaCategoriasFiltro">
-                    <datalist id="listaCategoriasFiltro"></datalist>
+                    <select id="filtroCategoria">
+                        <option value="">Todas</option>
+                    </select>
                 </div>
                 <div>
                     <label for="filtroBusca">Busca (Desc/Loja)</label>
@@ -580,7 +574,7 @@
                 <button class="calc-btn clear" onclick="limparCalc()">C</button>
                 <button class="calc-btn clear" onclick="apagarCalc()">←</button>
                 <button class="calc-btn operador" onclick="operadorCalc('/')">÷</button>
-                <button class="calc-btn operador" onclick="operadorCalc('*')">x</button>
+                <button class="calc-btn operador" onclick="operadorCalc('*')">×</button>
                 <button class="calc-btn" onclick="digitoCalc('7')">7</button>
                 <button class="calc-btn" onclick="digitoCalc('8')">8</button>
                 <button class="calc-btn" onclick="digitoCalc('9')">9</button>
@@ -599,7 +593,7 @@
             
             <h3>Resetar Todos os Dados</h3>
             <p><strong>ATENÇÃO:</strong> Esta ação é irreversível e apagará todas as transações, categorias e lojas.</p>
-            <input type="password" id="senhaReset" placeholder="Senha de Reset (Padrão: 123456)">
+            <input type="password" id="senhaReset" placeholder="Senha de Reset">
             <button class="btn btn-danger" onclick="resetarDados()">Confirmar Reset</button>
             
         </div>
@@ -615,7 +609,7 @@
                 <div style="flex: 1;">
                     <h3>Nova Categoria</h3>
                     <label for="modalTipo">Tipo:</label>
-                    <select id="modalTipo" style="width: 100%;">
+                    <select id="modalTipo" style="width: 100%;" onchange="carregarCategoriasModal()">
                         <option value="despesa">Despesa</option>
                         <option value="receita">Receita</option>
                     </select>
@@ -627,8 +621,9 @@
                 <div style="flex: 1;">
                     <h3>Nova Subcategoria</h3>
                     <label for="modalSubCategoriaPai">Categoria Pai:</label>
-                    <input type="text" id="modalSubCategoriaPai" list="listaCategoriasModal" placeholder="Ex: Alimentação (selecione)">
-                    <datalist id="listaCategoriasModal"></datalist>
+                    <select id="modalSubCategoriaPai" style="width: 100%;">
+                        <option value="">Selecione uma categoria</option>
+                    </select>
                     
                     <label for="modalNovaSubcategoria">Nome da Subcategoria:</label>
                     <input type="text" id="modalNovaSubcategoria" placeholder="Ex: Supermercado, Restaurante">
@@ -682,8 +677,25 @@
     }
     
     function getCategorias() {
-        // Estrutura esperada: { despesa: { 'Categoria X': {nome: 'Cat X', subcategorias: []} }, receita: {...} }
-        return JSON.parse(localStorage.getItem('categorias')) || { despesa: {}, receita: {} };
+        // Estrutura: { despesa: { 'Categoria X': {nome: 'Cat X', subcategorias: []} }, receita: {...} }
+        const categorias = localStorage.getItem('categorias');
+        if (!categorias) {
+            // Inicializa com categorias padrão
+            const categoriasPadrao = {
+                despesa: {
+                    'Alimentação': { nome: 'Alimentação', subcategorias: ['Supermercado', 'Restaurante'] },
+                    'Transporte': { nome: 'Transporte', subcategorias: ['Combustível', 'Ônibus'] },
+                    'Moradia': { nome: 'Moradia', subcategorias: ['Aluguel', 'Contas'] }
+                },
+                receita: {
+                    'Salário': { nome: 'Salário', subcategorias: [] },
+                    'Freelancer': { nome: 'Freelancer', subcategorias: [] }
+                }
+            };
+            localStorage.setItem('categorias', JSON.stringify(categoriasPadrao));
+            return categoriasPadrao;
+        }
+        return JSON.parse(categorias);
     }
 
     function setCategorias(categorias) {
@@ -741,7 +753,7 @@
         } 
         // Abrir
         else {
-            // Fechar outras seções antes de abrir
+            // Fechar outras seções antes de abrir (opcional, mas melhora a UX)
              document.querySelectorAll('.collapsible-content.expanded').forEach(otherContent => {
                  if(otherContent.id !== contentId) {
                      otherContent.style.maxHeight = '0px';
@@ -791,20 +803,16 @@
         });
     }
     
-    /**
-     * Reescrita: Simplifica o carregamento dos datalists para garantir que o tipo (receita/despesa) seja respeitado.
-     */
     function carregarCategoriasESubcategorias() {
         const categorias = getCategorias();
         const tipoSelecionado = document.getElementById('tipoTransacao').value; 
         
-        const datalistCatTransacao = document.getElementById('listaCategorias');
-        const datalistCatFiltro = document.getElementById('listaCategoriasFiltro');
-        const datalistCatModal = document.getElementById('listaCategoriasModal');
+        const selectCatTransacao = document.getElementById('categoriaTransacao');
+        const selectCatFiltro = document.getElementById('filtroCategoria');
         
-        datalistCatTransacao.innerHTML = '';
-        datalistCatFiltro.innerHTML = '';
-        datalistCatModal.innerHTML = '';
+        // Limpa selects
+        selectCatTransacao.innerHTML = '<option value="">Selecione uma categoria</option>';
+        selectCatFiltro.innerHTML = '<option value="">Todas</option>';
 
         // 1. Carrega categorias do tipo selecionado (para a Nova Transação)
         const categoriasDoTipo = categorias[tipoSelecionado] || {};
@@ -813,10 +821,11 @@
         nomesCategoriasDoTipo.forEach(catName => {
             const option = document.createElement('option');
             option.value = catName;
-            datalistCatTransacao.appendChild(option);
+            option.textContent = catName;
+            selectCatTransacao.appendChild(option);
         });
 
-        // 2. Carrega TODAS as categorias (para o Filtro de Relatórios E Modal de Cadastro)
+        // 2. Carrega TODAS as categorias (para o Filtro de Relatórios)
         const todasCategorias = new Set();
         for (const tipo in categorias) {
             for (const catName in categorias[tipo]) {
@@ -824,17 +833,12 @@
             }
         }
         
-        // Adiciona as categorias ao datalist de Filtro e ao datalist do Modal Categoria Pai
+        // Adiciona as categorias ao select de Filtro
         Array.from(todasCategorias).sort().forEach(cat => {
-            // Datalist de Filtro
             const optionFiltro = document.createElement('option');
             optionFiltro.value = cat;
-            datalistCatFiltro.appendChild(optionFiltro);
-            
-            // Datalist do Modal (Categoria Pai) - para subcategorias
-            const optionModal = document.createElement('option');
-            optionModal.value = cat;
-            datalistCatModal.appendChild(optionModal);
+            optionFiltro.textContent = cat;
+            selectCatFiltro.appendChild(optionFiltro);
         });
         
         carregarSubcategoriasPorCategoria();
@@ -844,9 +848,11 @@
         const categorias = getCategorias();
         const tipo = document.getElementById('tipoTransacao').value;
         const categoriaSelecionada = document.getElementById('categoriaTransacao').value.trim(); 
-        const datalistSub = document.getElementById('listaSubcategorias');
+        const selectSub = document.getElementById('subcategoriaTransacao');
         
-        datalistSub.innerHTML = '';
+        selectSub.innerHTML = '<option value="">Selecione uma subcategoria</option>';
+        
+        if (!categoriaSelecionada) return;
         
         // Assegura que estamos pegando a categoria correta para o tipo selecionado
         const categoriaObj = categorias[tipo] && categorias[tipo][categoriaSelecionada];
@@ -855,28 +861,43 @@
             categoriaObj.subcategorias.slice().sort().forEach(sub => {
                 const option = document.createElement('option');
                 option.value = sub;
-                datalistSub.appendChild(option);
+                option.textContent = sub;
+                selectSub.appendChild(option);
             });
         }
+    }
+    
+    function carregarCategoriasModal() {
+        const tipo = document.getElementById('modalTipo').value;
+        const categorias = getCategorias();
+        const selectCatModal = document.getElementById('modalSubCategoriaPai');
+        
+        selectCatModal.innerHTML = '<option value="">Selecione uma categoria</option>';
+        
+        const categoriasDoTipo = categorias[tipo] || {};
+        const nomesCategoriasDoTipo = Object.keys(categoriasDoTipo).sort(); 
+        
+        nomesCategoriasDoTipo.forEach(catName => {
+            const option = document.createElement('option');
+            option.value = catName;
+            option.textContent = catName;
+            selectCatModal.appendChild(option);
+        });
     }
 
     // --- FUNÇÕES DE CRUD DE CATEGORIAS (APENAS NO MODAL) ---
 
     function abrirModalCategorias() {
         document.getElementById('modalCategorias').style.display = 'block';
-        carregarCategoriasESubcategorias(); // Garante que datalists e display do modal estão atualizados
+        carregarCategoriasModal(); // Carrega categorias do modal
         exibirCategoriasParaGerenciamento(); 
     }
 
     function fecharModalCategorias() {
         document.getElementById('modalCategorias').style.display = 'none';
-        carregarCategoriasESubcategorias(); // Recarrega os datalists da Transação após o gerenciamento
+        carregarCategoriasESubcategorias(); // Recarrega os selects da Transação após o gerenciamento
     }
     
-    /**
-     * Fix 2.0 (Versão Robusta): Garante que a estrutura {nome: ..., subcategorias: []} é salva no tipo correto
-     * e adiciona feedback em caso de falha no LocalStorage.
-     */
     function cadastrarCategoriaModal() {
         const tipo = document.getElementById('modalTipo').value;
         const categoriaInput = document.getElementById('modalNovaCategoria');
@@ -887,44 +908,47 @@
             return;
         }
 
+        if (!confirm(`Deseja cadastrar a categoria "${categoriaNome}" para ${tipo}?`)) {
+            return;
+        }
+
         let categorias = getCategorias();
+        
+        // Garante que o tipo existe
         if (!categorias[tipo]) {
-            // Se o tipo (despesa/receita) não existe, crie.
             categorias[tipo] = {};
         }
 
-        // Validação e Cadastro
-        try {
-            if (!categorias[tipo][categoriaNome]) {
-                // Estrutura robusta para salvar a nova categoria
-                categorias[tipo][categoriaNome] = { nome: categoriaNome, subcategorias: [] };
-                
-                // Tenta salvar no LocalStorage
-                setCategorias(categorias);
-                
-                // Verifica se salvou (Busca a categoria recém-cadastrada)
-                const categoriasSalvas = getCategorias();
-                if (categoriasSalvas[tipo] && categoriasSalvas[tipo][categoriaNome]) {
-                    categoriaInput.value = ''; // Limpa o input
-                    carregarCategoriasESubcategorias(); 
-                    exibirCategoriasParaGerenciamento(); // Atualiza o modal
-                    alert(`SUCESSO: Categoria '${categoriaNome}' (${tipo}) cadastrada!`);
-                } else {
-                    // Falha silenciosa no LocalStorage (muito raro)
-                    alert('ERRO CRÍTICO: O cadastro falhou. O navegador pode estar bloqueando o salvamento. Tente limpar o cache.');
-                }
-            } else {
-                 alert(`ATENÇÃO: Categoria '${categoriaNome}' (${tipo}) já existe.`);
-            }
-        } catch (e) {
-            alert(`ERRO INESPERADO: Não foi possível salvar a categoria. Erro: ${e.message}`);
-            console.error(e);
+        // Verifica se a categoria já existe
+        if (categorias[tipo][categoriaNome]) {
+            alert(`ATENÇÃO: Categoria '${categoriaNome}' (${tipo}) já existe.`);
+            return;
         }
+
+        // Adiciona a nova categoria
+        categorias[tipo][categoriaNome] = { 
+            nome: categoriaNome, 
+            subcategorias: [] 
+        };
+        
+        // Salva no localStorage
+        setCategorias(categorias);
+        
+        // Limpa o input
+        categoriaInput.value = '';
+        
+        // Atualiza as interfaces
+        carregarCategoriasModal();
+        exibirCategoriasParaGerenciamento();
+        
+        // Se o tipo selecionado no formulário for o mesmo, atualiza também
+        if (document.getElementById('tipoTransacao').value === tipo) {
+            carregarCategoriasESubcategorias();
+        }
+        
+        alert(`SUCESSO: Categoria '${categoriaNome}' (${tipo}) cadastrada!`);
     }
     
-    /**
-     * Fix: Assegura que a Subcategoria é salva na Categoria Pai e no Tipo corretos.
-     */
     function cadastrarSubcategoriaModal() {
         const tipo = document.getElementById('modalTipo').value;
         const categoriaNome = document.getElementById('modalSubCategoriaPai').value.trim();
@@ -936,25 +960,47 @@
             return;
         }
 
-        let categorias = getCategorias();
-        // A categoria pai deve existir no TIPO selecionado no modal
-        const categoria = categorias[tipo] && categorias[tipo][categoriaNome];
-
-        if (categoria) {
-            if (!categoria.subcategorias.includes(subNome)) {
-                categoria.subcategorias.push(subNome);
-                categoria.subcategorias.sort(); 
-                setCategorias(categorias);
-                subInput.value = ''; // Limpa o input
-                document.getElementById('modalSubCategoriaPai').value = '';
-                exibirCategoriasParaGerenciamento(); // Atualiza o modal
-                alert(`SUCESSO: Subcategoria '${subNome}' adicionada à '${categoriaNome}' (${tipo}).`);
-            } else {
-                 alert(`ATENÇÃO: Subcategoria '${subNome}' já existe em '${categoriaNome}'.`);
-            }
-        } else {
-             alert(`Erro: Categoria Pai '${categoriaNome}' não encontrada para o tipo ${tipo}. Certifique-se de que a categoria existe para o tipo selecionado no campo "Tipo" acima.`);
+        if (!confirm(`Deseja cadastrar a subcategoria "${subNome}" para a categoria "${categoriaNome}"?`)) {
+            return;
         }
+
+        let categorias = getCategorias();
+        
+        // Verifica se a categoria existe
+        if (!categorias[tipo] || !categorias[tipo][categoriaNome]) {
+            alert(`Erro: Categoria Pai '${categoriaNome}' não encontrada para o tipo ${tipo}.`);
+            return;
+        }
+        
+        const categoria = categorias[tipo][categoriaNome];
+
+        // Verifica se a subcategoria já existe
+        if (categoria.subcategorias.includes(subNome)) {
+            alert(`ATENÇÃO: Subcategoria '${subNome}' já existe em '${categoriaNome}'.`);
+            return;
+        }
+
+        // Adiciona a nova subcategoria
+        categoria.subcategorias.push(subNome);
+        categoria.subcategorias.sort(); 
+        
+        // Salva no localStorage
+        setCategorias(categorias);
+        
+        // Limpa os inputs
+        subInput.value = '';
+        document.getElementById('modalSubCategoriaPai').value = '';
+        
+        // Atualiza as interfaces
+        exibirCategoriasParaGerenciamento();
+        
+        // Se a categoria selecionada no formulário for a mesma, atualiza também
+        if (document.getElementById('categoriaTransacao').value === categoriaNome && 
+            document.getElementById('tipoTransacao').value === tipo) {
+            carregarSubcategoriasPorCategoria();
+        }
+        
+        alert(`SUCESSO: Subcategoria '${subNome}' adicionada à '${categoriaNome}' (${tipo}).`);
     }
 
     function exibirCategoriasParaGerenciamento() {
@@ -973,6 +1019,7 @@
             const ul = document.createElement('ul');
             ul.classList.add('lista-categorias-ul');
             
+            // Pega os nomes das categorias e ordena
             const nomesCategorias = Object.keys(listaCats).sort();
 
             nomesCategorias.forEach(catNome => {
@@ -981,14 +1028,19 @@
                 
                 const subcategoriasOrdenadas = catObj.subcategorias.slice().sort(); 
                 
-                let subHTML = subcategoriasOrdenadas.map(sub => 
-                    `<span style="white-space: nowrap;">${sub} <button class="btn btn-danger" style="padding: 3px 6px; font-size: 0.7em;" onclick="excluirSubcategoria('${catNome}', '${sub}', '${tipo}')">X</button></span>`
-                ).join(' | ');
+                let subHTML = '';
+                if (subcategoriasOrdenadas.length > 0) {
+                    subHTML = subcategoriasOrdenadas.map(sub => 
+                        `<span style="white-space: nowrap;">${sub} <button class="btn btn-danger" style="padding: 3px 6px; font-size: 0.7em;" onclick="excluirSubcategoria('${catNome}', '${sub}', '${tipo}')">X</button></span>`
+                    ).join(' | ');
+                } else {
+                    subHTML = 'Nenhuma Subcategoria';
+                }
                 
                 li.innerHTML = `
                     <div style="flex-grow: 1; margin-right: 15px;">
                         <strong>${catNome}</strong>
-                        <div style="font-size: 0.9em; margin-top: 5px; color: #555; max-height: 50px; overflow: auto; padding-right: 10px;">${subHTML || 'Nenhuma Subcategoria'}</div>
+                        <div style="font-size: 0.9em; margin-top: 5px; color: #555; max-height: 50px; overflow: auto; padding-right: 10px;">${subHTML}</div>
                     </div>
                     <button class="btn btn-danger" style="flex-shrink: 0;" onclick="excluirCategoria('${catNome}', '${tipo}')">Excluir Categoria</button>
                 `;
@@ -1004,33 +1056,37 @@
     }
     
     function excluirCategoria(nome, tipo) {
-        if (confirm(`Tem certeza que deseja excluir a categoria '${nome}' (${tipo}) e todas as suas subcategorias? As transações existentes permanecerão, mas sem categoria associada.`)) {
-            const categorias = getCategorias();
-            if (categorias[tipo] && categorias[tipo][nome]) {
-                 delete categorias[tipo][nome];
-                 setCategorias(categorias);
-                 exibirCategoriasParaGerenciamento(); // Recarrega a lista do modal
-                 carregarCategoriasESubcategorias(); // Atualiza datalists de Transação
-                 alert(`Categoria '${nome}' excluída.`);
-            }
+        if (!confirm(`Tem certeza que deseja excluir a categoria '${nome}' (${tipo}) e todas as suas subcategorias?`)) {
+            return;
+        }
+        
+        const categorias = getCategorias();
+        if (categorias[tipo] && categorias[tipo][nome]) {
+             delete categorias[tipo][nome];
+             setCategorias(categorias);
+             exibirCategoriasParaGerenciamento(); // Recarrega a lista do modal
+             carregarCategoriasESubcategorias(); // Atualiza selects de Transação
+             alert(`Categoria '${nome}' excluída.`);
         }
     }
 
     function excluirSubcategoria(catNome, subNome, tipo) {
-        if (confirm(`Tem certeza que deseja excluir a subcategoria '${subNome}' de '${catNome}'?`)) {
-            const categorias = getCategorias();
-            const categoria = categorias[tipo] && categorias[tipo][catNome];
+        if (!confirm(`Tem certeza que deseja excluir a subcategoria '${subNome}' de '${catNome}'?`)) {
+            return;
+        }
+        
+        const categorias = getCategorias();
+        const categoria = categorias[tipo] && categorias[tipo][catNome];
 
-            if (categoria) {
-                const subcategorias = categoria.subcategorias;
-                const index = subcategorias.indexOf(subNome);
-                if (index > -1) {
-                    subcategorias.splice(index, 1);
-                    setCategorias(categorias);
-                    exibirCategoriasParaGerenciamento(); // Recarrega a lista do modal
-                    carregarCategoriasESubcategorias(); // Atualiza datalists de Transação
-                    alert(`Subcategoria '${subNome}' excluída.`);
-                }
+        if (categoria) {
+            const subcategorias = categoria.subcategorias;
+            const index = subcategorias.indexOf(subNome);
+            if (index > -1) {
+                subcategorias.splice(index, 1);
+                setCategorias(categorias);
+                exibirCategoriasParaGerenciamento(); // Recarrega a lista do modal
+                carregarCategoriasESubcategorias(); // Atualiza selects de Transação
+                alert(`Subcategoria '${subNome}' excluída.`);
             }
         }
     }
@@ -1141,6 +1197,10 @@
     }
 
     function alterarStatus(id, novoStatus) {
+        if (!confirm('Deseja realmente alterar o status desta transação?')) {
+            return;
+        }
+        
         let transacoes = getTransacoes();
         const transacaoIndex = transacoes.findIndex(t => t.id === id);
         
@@ -1219,7 +1279,6 @@
         abrirModalDetalhes();
     }
 
-
     // --- FUNÇÕES DE DASHBOARD ---
     
     function atualizarDashboard() {
@@ -1284,368 +1343,260 @@
         } else if (saldoAtual < 0) {
             saldoElement.classList.add('soma-negativa');
         } else {
-             saldoElement.classList.add('soma-neutra');
+            saldoElement.classList.add('soma-neutra');
         }
-
-        if(isPrivacidadeAtiva) {
-            document.querySelectorAll('.dashboard-valor').forEach(p => p.classList.add('valor-oculto'));
-        } else {
-            document.querySelectorAll('.dashboard-valor').forEach(p => p.classList.remove('valor-oculto'));
-        }
-
-        carregarLojas();
-        carregarCategoriasESubcategorias();
     }
-
 
     // --- FUNÇÕES DE RELATÓRIO ---
     
     function toggleDateFilters() {
         const periodo = document.getElementById('filtroPeriodo').value;
-        const dataInicioDiv = document.getElementById('filtroDataPersonalizada');
-        const dataFimDiv = document.getElementById('filtroDataPersonalizada2');
-
+        const divDataInicio = document.getElementById('filtroDataPersonalizada');
+        const divDataFim = document.getElementById('filtroDataPersonalizada2');
+        
         if (periodo === 'personalizado') {
-            dataInicioDiv.style.display = 'block';
-            dataFimDiv.style.display = 'block';
+            divDataInicio.style.display = 'block';
+            divDataFim.style.display = 'block';
         } else {
-            dataInicioDiv.style.display = 'none';
-            dataFimDiv.style.display = 'none';
-            // Limpa as datas personalizadas para evitar conflito se mudar o filtro
-            document.getElementById('dataInicio').valueAsDate = null;
-            document.getElementById('dataFim').valueAsDate = null;
+            divDataInicio.style.display = 'none';
+            divDataFim.style.display = 'none';
         }
     }
     
-    function aplicarFiltroDePeriodo(periodo, dataInicioStr, dataFimStr) {
-        const dataAtual = new Date();
-        dataAtual.setHours(0, 0, 0, 0); 
-        let inicio = null;
-        let fim = null;
-
-        if (periodo === 'mes') {
-            inicio = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1);
-            fim = new Date(dataAtual.getFullYear(), dataAtual.getMonth() + 1, 0); 
-        } else if (periodo === '3meses') {
-            inicio = new Date(dataAtual.getFullYear(), dataAtual.getMonth() - 2, 1);
-            fim = new Date(dataAtual.getFullYear(), dataAtual.getMonth() + 1, 0);
-        } else if (periodo === '6meses') {
-            inicio = new Date(dataAtual.getFullYear(), dataAtual.getMonth() - 5, 1);
-            fim = new Date(dataAtual.getFullYear(), dataAtual.getMonth() + 1, 0);
-        } else if (periodo === '1ano') {
-            inicio = new Date(dataAtual.getFullYear() - 1, dataAtual.getMonth(), dataAtual.getDate());
-            inicio.setHours(0, 0, 0, 0);
-            // Fim é o final do dia atual
-            fim = new Date(dataAtual); 
-        } else if (periodo === 'personalizado') {
-            inicio = dataInicioStr ? new Date(dataInicioStr + 'T00:00:00') : null;
-            fim = dataFimStr ? new Date(dataFimStr + 'T00:00:00') : null;
-        }
-
-        // Se o período não for personalizado, define as datas nos inputs
-        if (periodo !== 'personalizado') {
-            document.getElementById('dataInicio').valueAsDate = inicio;
-            // O input de data usa a data do dia anterior se for 0, então usamos a data de fim do mês, não o primeiro dia do próximo
-            if (fim) {
-                document.getElementById('dataFim').value = fim.toISOString().split('T')[0];
-            }
-        }
-        
-        return { inicio, fim };
-    }
-
-
     function gerarRelatorio() {
         const transacoes = getTransacoes();
-        const filtroPeriodo = document.getElementById('filtroPeriodo').value;
-        const dataInicioStr = document.getElementById('dataInicio').value;
-        const dataFimStr = document.getElementById('dataFim').value;
-        const filtroTipo = document.getElementById('filtroTipo').value;
-        const filtroCategoria = document.getElementById('filtroCategoria').value.toLowerCase();
-        const filtroBusca = document.getElementById('filtroBusca').value.toLowerCase();
-        const tabelaBody = document.querySelector('#tabelaRelatorioBody');
-        tabelaBody.innerHTML = '';
+        const periodo = document.getElementById('filtroPeriodo').value;
+        const tipoFiltro = document.getElementById('filtroTipo').value;
+        const categoriaFiltro = document.getElementById('filtroCategoria').value;
+        const buscaFiltro = document.getElementById('filtroBusca').value.toLowerCase();
+        
+        let dataInicio, dataFim;
+        const hoje = new Date();
+        
+        if (periodo === 'mes') {
+            dataInicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+            dataFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+        } else if (periodo === '3meses') {
+            dataInicio = new Date(hoje.getFullYear(), hoje.getMonth() - 2, 1);
+            dataFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+        } else if (periodo === '6meses') {
+            dataInicio = new Date(hoje.getFullYear(), hoje.getMonth() - 5, 1);
+            dataFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+        } else if (periodo === '1ano') {
+            dataInicio = new Date(hoje.getFullYear() - 1, hoje.getMonth(), 1);
+            dataFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+        } else if (periodo === 'personalizado') {
+            dataInicio = new Date(document.getElementById('dataInicio').value + 'T00:00:00');
+            dataFim = new Date(document.getElementById('dataFim').value + 'T00:00:00');
+        }
+        
+        // Verifica se as datas são válidas
+        if (isNaN(dataInicio) || isNaN(dataFim)) {
+            alert('Por favor, selecione um período válido.');
+            return;
+        }
         
         let somaReceitas = 0;
         let somaDespesas = 0;
-
-        const hoje = new Date();
-        hoje.setHours(0, 0, 0, 0); 
+        const tbody = document.getElementById('tabelaRelatorioBody');
+        tbody.innerHTML = '';
         
-        // Aplica o filtro de período para obter as datas limite
-        const { inicio: dataLimiteInicio, fim: dataLimiteFim } = aplicarFiltroDePeriodo(filtroPeriodo, dataInicioStr, dataFimStr);
-
-        const transacoesFiltradas = transacoes.filter(transacao => {
-            const transacaoDate = new Date(transacao.data + 'T00:00:00');
+        const transacoesFiltradas = transacoes.filter(t => {
+            const dataTransacao = new Date(t.data + 'T00:00:00');
+            const noPeriodo = dataTransacao >= dataInicio && dataTransacao <= dataFim;
+            const tipoOk = !tipoFiltro || t.tipo === tipoFiltro;
+            const categoriaOk = !categoriaFiltro || t.categoria === categoriaFiltro;
+            const buscaOk = !buscaFiltro || 
+                           t.descricao.toLowerCase().includes(buscaFiltro) || 
+                           (t.nome && t.nome.toLowerCase().includes(buscaFiltro));
             
-            // Filtro de Período
-            let matchPeriodo = true;
-            if (dataLimiteInicio) {
-                matchPeriodo = transacaoDate >= dataLimiteInicio;
-            }
-            if (dataLimiteFim) {
-                // Para incluir o dia final (dataLimiteFim), comparamos com o dia seguinte
-                let dataFimInclusiva = new Date(dataLimiteFim);
-                dataFimInclusiva.setDate(dataFimInclusiva.getDate() + 1); 
-                matchPeriodo = matchPeriodo && (transacaoDate < dataFimInclusiva);
-            }
-
-            // Outros Filtros
-            const matchTipo = !filtroTipo || transacao.tipo === filtroTipo;
-            const matchCategoria = !filtroCategoria || (transacao.categoria && transacao.categoria.toLowerCase().includes(filtroCategoria));
-            const matchBusca = !filtroBusca || 
-                               (transacao.descricao && transacao.descricao.toLowerCase().includes(filtroBusca)) || 
-                               (transacao.nome && transacao.nome.toLowerCase().includes(filtroBusca));
-
-            return matchPeriodo && matchTipo && matchCategoria && matchBusca;
+            return noPeriodo && tipoOk && categoriaOk && buscaOk;
         });
-
+        
+        // Ordena por data
         transacoesFiltradas.sort((a, b) => new Date(a.data) - new Date(b.data));
-
-        transacoesFiltradas.forEach(transacao => {
+        
+        transacoesFiltradas.forEach(t => {
+            const dataVencimento = new Date(t.data + 'T00:00:00');
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
             
-            // LÓGICA DE SOMA (Apenas Pagos/Recebidos no Período Filtrado)
-            if (transacao.status === 'Recebido') {
-                somaReceitas += transacao.valor;
-            } else if (transacao.status === 'Pago') {
-                somaDespesas += transacao.valor;
+            // Verifica se está vencida
+            const isVencida = dataVencimento < hoje && t.status !== 'Pago' && t.status !== 'Recebido';
+            
+            // Soma para o resumo
+            if (t.status === 'Recebido') {
+                somaReceitas += t.valor;
+            } else if (t.status === 'Pago') {
+                somaDespesas += t.valor;
             }
-
-            const newRow = tabelaBody.insertRow();
             
-            // LÓGICA DE CORES E STATUS (ATUALIZADA)
-            const transacaoDate = new Date(transacao.data + 'T00:00:00');
-            let statusDisplay = transacao.status;
-            let statusClass = '';
+            // Cria a linha da tabela
+            const tr = document.createElement('tr');
             
-            const isVencida = transacaoDate < hoje && transacao.status !== 'Pago' && transacao.status !== 'Recebido';
-
+            // Aplica classe especial se estiver vencida
             if (isVencida) {
-                statusDisplay = 'VENCIDO/ATRASADO';
-                statusClass = 'status-vencido';
-            } else if (transacao.status === 'Pendente') {
-                statusClass = 'status-pendente';
-            } else if (transacao.status === 'Pago' || transacao.status === 'Recebido') {
-                 // Novo status de conclusão com cor verde
-                statusClass = 'status-concluido'; 
+                tr.classList.add('status-vencido');
             }
             
-            newRow.insertCell(0).textContent = transacao.data;
-            newRow.insertCell(1).textContent = transacao.descricao;
-            newRow.insertCell(2).textContent = transacao.tipo;
-            newRow.insertCell(3).textContent = transacao.categoria;
-            newRow.insertCell(4).textContent = transacao.subcategoria || '-';
+            // Células da tabela
+            tr.innerHTML = `
+                <td>${t.data}</td>
+                <td>${t.descricao}</td>
+                <td>${t.tipo}</td>
+                <td>${t.categoria}</td>
+                <td>${t.subcategoria || '-'}</td>
+                <td>${formatarMoeda(t.valor)}</td>
+                <td>${isVencida ? 'VENCIDO/ATRASADO' : t.status}</td>
+                <td>
+                    <button class="btn btn-info" style="padding: 3px 6px; font-size: 0.8em; margin-right: 5px;" onclick="detalharTransacaoOriginal(${t.idOriginal})">Detalhes</button>
+                    <select onchange="alterarStatus(${t.id}, this.value)" style="padding: 3px; font-size: 0.8em;">
+                        ${t.tipo === 'despesa' ? 
+                            `<option value="A Pagar" ${t.status === 'A Pagar' ? 'selected' : ''}>A Pagar</option>
+                             <option value="Pendente" ${t.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
+                             <option value="Pago" ${t.status === 'Pago' ? 'selected' : ''}>Pago</option>` :
+                            `<option value="A Receber" ${t.status === 'A Receber' ? 'selected' : ''}>A Receber</option>
+                             <option value="Pendente" ${t.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
+                             <option value="Recebido" ${t.status === 'Recebido' ? 'selected' : ''}>Recebido</option>`
+                        }
+                    </select>
+                    <button class="btn btn-danger" style="padding: 3px 6px; font-size: 0.8em; margin-left: 5px;" onclick="excluirTransacao(${t.id})">Excluir</button>
+                </td>
+            `;
             
-            // Valor com cor
-            const valorCell = newRow.insertCell(5);
-            valorCell.textContent = formatarMoeda(transacao.valor);
-            valorCell.style.color = transacao.tipo === 'receita' ? '#28a745' : '#dc3545';
-            valorCell.style.fontWeight = 'bold';
-            
-            const statusCell = newRow.insertCell(6);
-            statusCell.textContent = statusDisplay;
-            if (statusClass) {
-                statusCell.classList.add(statusClass);
-            }
-
-            const acoesCell = newRow.insertCell(7);
-            acoesCell.style.display = 'flex';
-            acoesCell.style.gap = '5px';
-            acoesCell.style.alignItems = 'center';
-            acoesCell.style.minWidth = '200px';
-            
-            // Botão Lupa (Detalhe Original)
-            if (transacao.totalParcelas > 1 && transacao.parcelaAtual === 1) { 
-                const lupaBtn = document.createElement('button');
-                lupaBtn.innerHTML = '🔍';
-                lupaBtn.classList.add('btn', 'btn-info');
-                lupaBtn.onclick = () => detalharTransacaoOriginal(transacao.idOriginal);
-                lupaBtn.style.padding = '5px 10px';
-                lupaBtn.title = 'Ver detalhes da transação original (todas as parcelas)';
-                acoesCell.appendChild(lupaBtn);
-            }
-
-
-            // Dropdown de Status
-            const statusSelect = document.createElement('select');
-            const options = transacao.tipo === 'despesa' 
-                ? ['A Pagar', 'Pendente', 'Pago'] 
-                : ['A Receber', 'Pendente', 'Recebido'];
-            statusSelect.innerHTML = options.map(status => 
-                `<option value="${status}" ${transacao.status === status ? 'selected' : ''}>${status}</option>`
-            ).join('');
-
-            statusSelect.onchange = (e) => alterarStatus(transacao.id, e.target.value);
-            statusSelect.classList.add('btn', 'btn-secondary');
-            statusSelect.style.padding = '5px 8px';
-            statusSelect.style.height = '32px';
-            
-            // Botão de exclusão (X)
-            const deleteBtn = document.createElement('button');
-            deleteBtn.textContent = 'X';
-            deleteBtn.classList.add('btn', 'btn-danger');
-            deleteBtn.onclick = () => excluirTransacao(transacao.id);
-            deleteBtn.style.padding = '5px 10px';
-            deleteBtn.style.height = '32px';
-
-            acoesCell.appendChild(statusSelect);
-            acoesCell.appendChild(deleteBtn);
+            tbody.appendChild(tr);
         });
-
-        // Atualiza o resumo do relatório
+        
+        // Atualiza o resumo
         document.getElementById('somaReceitas').textContent = formatarMoeda(somaReceitas);
         document.getElementById('somaDespesas').textContent = formatarMoeda(somaDespesas);
-        const saldoRelatorio = somaReceitas - somaDespesas;
-        document.getElementById('saldoRelatorio').textContent = formatarMoeda(saldoRelatorio);
+        document.getElementById('saldoRelatorio').textContent = formatarMoeda(somaReceitas - somaDespesas);
         
-        const saldoElement = document.getElementById('saldoRelatorio');
-        saldoElement.classList.remove('soma-positiva', 'soma-negativa', 'soma-neutra');
-        if (saldoRelatorio > 0) {
-            saldoElement.classList.add('soma-positiva');
-        } else if (saldoRelatorio < 0) {
-            saldoElement.classList.add('soma-negativa');
+        // Atualiza a classe de cor do saldo do relatório
+        const saldoRelatorioElement = document.getElementById('saldoRelatorio');
+        saldoRelatorioElement.classList.remove('soma-positiva', 'soma-negativa', 'soma-neutra');
+        if (somaReceitas - somaDespesas > 0) {
+            saldoRelatorioElement.classList.add('soma-positiva');
+        } else if (somaReceitas - somaDespesas < 0) {
+            saldoRelatorioElement.classList.add('soma-negativa');
         } else {
-             saldoElement.classList.add('soma-neutra');
+            saldoRelatorioElement.classList.add('soma-neutra');
         }
     }
 
-
-    // --- FUNÇÕES DE CALCULADORA ---
-    function digitoCalc(digito) {
-        const display = document.getElementById('displayCalc');
-        // Prepara o valor para adição (remove a vírgula para lógica interna)
-        let internalValue = displayValue.includes(',') ? displayValue.replace(',', '.') : displayValue;
+    // --- FUNÇÕES DE RESET ---
+    
+    function resetarDados() {
+        const senha = document.getElementById('senhaReset').value;
         
+        if (senha !== PASS_RESET) {
+            alert('Senha incorreta!');
+            return;
+        }
+        
+        if (!confirm('ATENÇÃO: Esta ação é irreversível e apagará TODOS os seus dados. Deseja continuar?')) {
+            return;
+        }
+        
+        localStorage.removeItem('transacoes');
+        localStorage.removeItem('categorias');
+        localStorage.removeItem('lojas');
+        
+        document.getElementById('senhaReset').value = '';
+        atualizarDashboard();
+        gerarRelatorio();
+        carregarCategoriasESubcategorias();
+        carregarLojas();
+        
+        alert('Todos os dados foram resetados com sucesso!');
+    }
+
+    // --- FUNÇÕES DA CALCULADORA ---
+    
+    function atualizarDisplay() {
+        document.getElementById('displayCalc').textContent = displayValue;
+    }
+    
+    function digitoCalc(digito) {
         if (aguardandoSegundoOperando) {
             displayValue = digito;
             aguardandoSegundoOperando = false;
-            internalValue = displayValue;
         } else {
-            if (digito === ',') {
-                if (!internalValue.includes('.')) {
-                    // Adiciona o ponto para lógica interna
-                    displayValue = internalValue + '.'; 
-                }
-            } else {
-                 displayValue = internalValue === '0' ? digito : internalValue + digito;
-            }
+            displayValue = displayValue === '0' ? digito : displayValue + digito;
         }
-        // Atualiza o display (substitui ponto por vírgula para visualização)
-        display.textContent = displayValue.replace('.', ','); 
+        atualizarDisplay();
     }
-
+    
     function operadorCalc(proximoOperador) {
-        const valorAtual = parseFloat(displayValue.replace(',', '.'));
-
+        const valorInput = parseFloat(displayValue.replace(',', '.'));
+        
         if (primeiroOperando === null) {
-            primeiroOperando = valorAtual;
+            primeiroOperando = valorInput;
         } else if (operadorPendente) {
-            const resultado = calcular(primeiroOperando, valorAtual, operadorPendente);
-            displayValue = String(resultado);
+            const resultado = realizarCalculo();
+            displayValue = String(resultado).replace('.', ',');
             primeiroOperando = resultado;
-            document.getElementById('displayCalc').textContent = displayValue.replace('.', ',');
+            atualizarDisplay();
         }
-
-        operadorPendente = proximoOperador;
+        
         aguardandoSegundoOperando = true;
+        operadorPendente = proximoOperador;
     }
-
+    
     function igualCalc() {
-        const valorAtual = parseFloat(displayValue.replace(',', '.'));
-        if (primeiroOperando !== null && operadorPendente !== null) {
-            const resultado = calcular(primeiroOperando, valorAtual, operadorPendente);
-            displayValue = String(resultado);
-            document.getElementById('displayCalc').textContent = displayValue.replace('.', ',');
-            primeiroOperando = null;
-            operadorPendente = null;
-            aguardandoSegundoOperando = false;
+        if (operadorPendente === null || primeiroOperando === null) return;
+        
+        const resultado = realizarCalculo();
+        displayValue = String(resultado).replace('.', ',');
+        primeiroOperando = null;
+        operadorPendente = null;
+        aguardandoSegundoOperando = false;
+        atualizarDisplay();
+    }
+    
+    function realizarCalculo() {
+        const segundoOperando = parseFloat(displayValue.replace(',', '.'));
+        
+        if (operadorPendente === '+') {
+            return primeiroOperando + segundoOperando;
+        } else if (operadorPendente === '-') {
+            return primeiroOperando - segundoOperando;
+        } else if (operadorPendente === '*') {
+            return primeiroOperando * segundoOperando;
+        } else if (operadorPendente === '/') {
+            return primeiroOperando / segundoOperando;
         }
+        
+        return segundoOperando;
     }
-
-    function calcular(primeiro, segundo, operador) {
-        if (operador === '+') { return primeiro + segundo; }
-        if (operador === '-') { return primeiro - segundo; }
-        if (operador === '*') { return primeiro * segundo; }
-        if (operador === '/') { return segundo === 0 ? 'Erro' : primeiro / segundo; }
-        return segundo;
-    }
-
+    
     function limparCalc() {
         displayValue = '0';
         primeiroOperando = null;
         operadorPendente = null;
         aguardandoSegundoOperando = false;
-        document.getElementById('displayCalc').textContent = '0';
+        atualizarDisplay();
     }
-
+    
     function apagarCalc() {
-        const display = document.getElementById('displayCalc');
-        if (aguardandoSegundoOperando) return; 
-        
-        let text = display.textContent.replace(',', '.'); // Converte para lógica interna
-
-        if (text.length > 1 && text !== 'Erro') {
-            text = text.slice(0, -1);
-            displayValue = text;
-            display.textContent = text.replace('.', ','); // Converte de volta para visualização
-        } else {
-            display.textContent = '0';
-            displayValue = '0';
-        }
+        displayValue = displayValue.slice(0, -1) || '0';
+        atualizarDisplay();
     }
-
-
-    // --- FUNÇÃO DE RESET ---
-    function resetarDados() {
-        const senha = document.getElementById('senhaReset').value;
-        if (senha === PASS_RESET) {
-            if (confirm('ATENÇÃO: Isso irá apagar TODOS os seus dados (transações, lojas, categorias). Tem certeza?')) {
-                localStorage.removeItem('transacoes');
-                localStorage.removeItem('lojas');
-                localStorage.removeItem('categorias');
-                localStorage.removeItem('subcategorias'); // Limpa a chave desnecessária
-                alert('Dados resetados com sucesso! Recarregando...');
-                window.location.reload(); 
-            }
-        } else {
-            alert('Senha incorreta!');
-        }
-    }
-
 
     // --- INICIALIZAÇÃO ---
-    window.onload = function() {
-        // Inicializa o modo Stealth
-        isPrivacidadeAtiva = true; 
-        document.getElementById('privacidadeToggle').innerHTML = '🔒';
-        
-        // Configurações de UI
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializa o sistema
         atualizarStatusPadrao();
-        toggleDateFilters(); 
-
-        // Carregamento de Dados
-        carregarLojas();
         carregarCategoriasESubcategorias();
-        atualizarDashboard(); 
+        carregarLojas();
+        atualizarDashboard();
+        gerarRelatorio();
         
-        // Expansão da aba Dashboard na inicialização
-        document.querySelectorAll('.collapsible-header').forEach(header => {
-            const content = header.nextElementSibling;
-            const arrow = header.querySelector('.arrow');
-            
-            if(content.id === 'dashboardContent') {
-                content.classList.add('expanded');
-                content.style.maxHeight = '4000px'; 
-                arrow.style.transform = 'rotate(180deg)';
-            } else {
-                content.classList.remove('expanded');
-                content.style.maxHeight = '0px'; 
-                arrow.style.transform = 'rotate(0deg)';
-            }
-        });
-        
-    };
-
+        // Define a data atual como padrão
+        document.getElementById('dataTransacao').valueAsDate = new Date();
+    });
 </script>
+
 </body>
 </html>
