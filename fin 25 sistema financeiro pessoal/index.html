@@ -9,7 +9,7 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             background-color: #f4f7f9;
             color: #333;
         }
@@ -18,7 +18,7 @@
             max-width: 1200px;
             margin: auto;
             background-color: #fff;
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
@@ -27,6 +27,7 @@
             color: #007bff;
             text-align: center;
             margin-bottom: 20px;
+            font-size: 1.8rem;
         }
         
         /* --- ESTILOS DE COMPONENTES --- */
@@ -92,11 +93,13 @@
 
         .form-row {
             display: flex;
-            gap: 20px;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
         .form-row > div {
             flex: 1;
+            min-width: 200px;
         }
         
         /* --- BOTÕES --- */
@@ -146,16 +149,68 @@
             background-color: #0c8a9f;
         }
 
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .btn-calc {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #007bff;
+            color: white;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+
+        .btn-calc:hover {
+            background-color: #0056b3;
+        }
+        
+        .btn-calendar {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #4285f4;
+            color: white;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 99;
+        }
+
+        .btn-calendar:hover {
+            background-color: #3367d6;
+        }
+
         .btn-group {
             margin-top: 20px;
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
         
         /* --- DASHBOARD --- */
         .dashboard {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
         }
@@ -199,7 +254,8 @@
             border-radius: 4px;
             height: 1.1em;
             display: inline-block; 
-            min-width: 100px;
+            min-width: 80px;
+            max-width: 120px;
         }
         
         .privacidade-toggle {
@@ -218,7 +274,7 @@
         }
 
         .relatorio-filtros > div {
-            flex-basis: calc(25% - 10px); 
+            flex-basis: calc(50% - 10px); 
             min-width: 150px;
         }
         
@@ -231,17 +287,23 @@
             display: flex;
             justify-content: space-around;
             font-weight: bold;
+            flex-wrap: wrap;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 15px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
+            min-width: 600px;
         }
 
         th, td {
             border: 1px solid #ddd;
-            padding: 12px 8px;
+            padding: 8px;
             text-align: left;
             font-size: 0.9em;
         }
@@ -250,6 +312,8 @@
             background-color: #007bff;
             color: white;
             text-transform: uppercase;
+            position: sticky;
+            top: 0;
         }
         
         tr:nth-child(even) {
@@ -285,9 +349,9 @@
         .modal-content {
             background-color: #fefefe;
             margin: 5% auto; 
-            padding: 25px;
+            padding: 20px;
             border: 1px solid #888;
-            width: 80%; 
+            width: 90%; 
             max-width: 700px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
@@ -321,6 +385,7 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
+            flex-wrap: wrap;
         }
         
         .lista-categorias-ul li:last-child {
@@ -328,16 +393,22 @@
         }
         
         /* --- CALCULADORA --- */
+        .calculadora-container {
+            position: fixed;
+            bottom: 160px;
+            right: 20px;
+            z-index: 98;
+            display: none;
+        }
+
         .calculadora {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 5px;
-            max-width: 300px;
-            margin: 20px auto 0;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
             background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
         #displayCalc {
@@ -346,7 +417,7 @@
             color: white;
             padding: 15px;
             text-align: right;
-            font-size: 2em;
+            font-size: 1.5em;
             border-radius: 5px;
             margin-bottom: 5px;
             overflow: hidden; 
@@ -355,7 +426,7 @@
 
         .calc-btn {
             padding: 15px;
-            font-size: 1.1em;
+            font-size: 1em;
             border: 1px solid #ddd;
             border-radius: 4px;
             cursor: pointer;
@@ -384,7 +455,121 @@
         .clear:hover {
             background-color: #e02f23;
         }
+
+        /* --- ÍCONE DE AJUDA --- */
+        .help-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 14px;
+        }
+
+        .help-icon:hover {
+            background-color: #0056b3;
+        }
         
+        /* --- AJUDA NO MODAL --- */
+        .ajuda-container {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .ajuda-container h3 {
+            color: #007bff;
+            margin-top: 0;
+        }
+
+        .ajuda-container ul {
+            padding-left: 20px;
+        }
+
+        .ajuda-container li {
+            margin-bottom: 8px;
+        }
+        
+        /* --- ESTILOS PARA STATUS DAS PARCELAS --- */
+        .parcela-status-select {
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 0.9em;
+        }
+        
+        .parcela-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .parcela-info {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        
+        .parcela-actions {
+            flex-shrink: 0;
+        }
+        
+        /* --- RESPONSIVO --- */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .relatorio-filtros > div {
+                flex-basis: 100%;
+            }
+            
+            .dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .dashboard-item:first-child {
+                grid-column: span 2;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 15px;
+            }
+            
+            .calculadora {
+                width: 280px;
+            }
+            
+            .valor-oculto {
+                min-width: 60px;
+                max-width: 80px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -393,17 +578,33 @@
         <h1>Gerenciador Financeiro Pessoal</h1>
 
         <div class="collapsible-header" onclick="toggleSection('dashboardContent')">
-            Dashboard (Resumo) <button id="privacidadeToggle" class="btn btn-secondary privacidade-toggle" onclick="togglePrivacidade(event)">🔒</button> <span class="arrow">▼</span>
+            Dashboard (Resumo) <button id="privacidadeToggle" class="btn btn-secondary privacidade-toggle" onclick="togglePrivacidade(event)">🔓</button> <span class="arrow">▼</span>
         </div>
         <div class="collapsible-content" id="dashboardContent">
             <div class="dashboard">
-                <div class="dashboard-item" style="grid-column: span 4; background-color: #e9f5ff; border: 2px solid #007bff;">
-                    <div class="dashboard-title">SALDO TOTAL ATUAL (Quitado/Recebido)</div>
+                <!-- Cartões maiores (primeira linha) -->
+                <div class="dashboard-item" style="background-color: #ffe6e6;">
+                    <div class="dashboard-title">Contas A Pagar</div>
+                    <p id="aPagarCount" class="dashboard-valor soma-negativa">0</p>
+                </div>
+                <div class="dashboard-item" style="background-color: #fff3cd;">
+                    <div class="dashboard-title">Pendente</div>
+                    <p id="pendentesCount" class="dashboard-valor soma-neutra">0</p>
+                </div>
+                <div class="dashboard-item" style="background-color: #ffcccc;">
+                    <div class="dashboard-title">Vencidas</div>
+                    <p id="vencidasCount" class="dashboard-valor soma-negativa">0</p>
+                </div>
+                
+                <!-- Cartões menores (segunda linha) -->
+                <div class="dashboard-item" style="background-color: #e9f5ff; border: 2px solid #007bff;">
+                    <div class="dashboard-title">Saldo Atual</div>
                     <p id="saldoAtual" class="dashboard-valor soma-neutra">R$ 0,00</p>
                 </div>
-            </div>
-            
-            <div class="dashboard">
+                <div class="dashboard-item" style="background-color: #e6ffe6;">
+                    <div class="dashboard-title">Contas a Receber</div>
+                    <p id="aReceberCount" class="dashboard-valor soma-positiva">0</p>
+                </div>
                 <div class="dashboard-item">
                     <div class="dashboard-title">Receitas Quitadas no Mês</div>
                     <p id="receitasMes" class="dashboard-valor soma-positiva">R$ 0,00</p>
@@ -411,22 +612,6 @@
                 <div class="dashboard-item">
                     <div class="dashboard-title">Despesas Pagas no Mês</div>
                     <p id="despesasMes" class="dashboard-valor soma-negativa">R$ 0,00</p>
-                </div>
-                <div class="dashboard-item" style="background-color: #ffe6e6;">
-                    <div class="dashboard-title">Contas A Pagar</div>
-                    <p id="aPagarCount" class="dashboard-valor soma-negativa">0</p>
-                </div>
-                <div class="dashboard-item" style="background-color: #e6ffe6;">
-                    <div class="dashboard-title">Contas A Receber</div>
-                    <p id="aReceberCount" class="dashboard-valor soma-positiva">0</p>
-                </div>
-                <div class="dashboard-item" style="background-color: #fff3cd;">
-                    <div class="dashboard-title">Pendente</div>
-                    <p id="pendentesCount" class="dashboard-valor soma-neutra">0</p>
-                </div>
-                 <div class="dashboard-item" style="background-color: #eee;">
-                    <div class="dashboard-title">Total de Transações Quitadas</div>
-                    <p id="pagosRecebidosCount" class="dashboard-valor soma-neutra">0</p>
                 </div>
             </div>
         </div>
@@ -493,7 +678,7 @@
         </div>
 
         <div class="collapsible-header" onclick="toggleSection('relatorioContent')">
-            Relatórios e Extrato <span class="arrow">▼</span>
+            Relatórios e Extrato <span class="help-icon" onclick="abrirModalAjuda()" title="Ajuda">i</span> <span class="arrow">▼</span>
         </div>
         <div class="collapsible-content" id="relatorioContent">
             <h2>Filtros</h2>
@@ -539,58 +724,35 @@
             <button class="btn btn-primary" onclick="gerarRelatorio()">Gerar Relatório</button>
 
             <div class="relatorio-resumo">
-                <p>Receitas Quitadas: <span id="somaReceitas" class="soma-positiva">R$ 0,00</span></p>
-                <p>Despesas Pagas: <span id="somaDespesas" class="soma-negativa">R$ 0,00</span></p>
-                <p>Saldo do Período: <span id="saldoRelatorio" class="soma-neutra">R$ 0,00</span></p>
+                <p>Contas a Pagar: <span id="contasAPagarRelatorio" class="soma-negativa">0</span></p>
+                <p>Pendências: <span id="pendenciasRelatorio" class="soma-neutra">0</span></p>
+                <p>Saldo Disponível: <span id="saldoDisponivelRelatorio" class="soma-neutra">R$ 0,00</span></p>
             </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Descrição</th>
-                        <th>Tipo</th>
-                        <th>Categoria</th>
-                        <th>Subcategoria</th>
-                        <th>Valor (R$)</th>
-                        <th>Status</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody id="tabelaRelatorioBody">
-                    </tbody>
-            </table>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Descrição</th>
+                            <th>Tipo</th>
+                            <th>Categoria</th>
+                            <th>Subcategoria</th>
+                            <th>Valor (R$)</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaRelatorioBody">
+                        </tbody>
+                </table>
+            </div>
         </div>
 
         <div class="collapsible-header" onclick="toggleSection('configContent')">
             Configurações e Ajuda <span class="arrow">▼</span>
         </div>
         <div class="collapsible-content" id="configContent">
-            <h2>Ferramentas</h2>
-
-            <h3>Calculadora Rápida</h3>
-            <div class="calculadora">
-                <div id="displayCalc">0</div>
-                <button class="calc-btn clear" onclick="limparCalc()">C</button>
-                <button class="calc-btn clear" onclick="apagarCalc()">←</button>
-                <button class="calc-btn operador" onclick="operadorCalc('/')">÷</button>
-                <button class="calc-btn operador" onclick="operadorCalc('*')">×</button>
-                <button class="calc-btn" onclick="digitoCalc('7')">7</button>
-                <button class="calc-btn" onclick="digitoCalc('8')">8</button>
-                <button class="calc-btn" onclick="digitoCalc('9')">9</button>
-                <button class="calc-btn operador" onclick="operadorCalc('-')">-</button>
-                <button class="calc-btn" onclick="digitoCalc('4')">4</button>
-                <button class="calc-btn" onclick="digitoCalc('5')">5</button>
-                <button class="calc-btn" onclick="digitoCalc('6')">6</button>
-                <button class="calc-btn operador" onclick="operadorCalc('+')">+</button>
-                <button class="calc-btn" onclick="digitoCalc('1')">1</button>
-                <button class="calc-btn" onclick="digitoCalc('2')">2</button>
-                <button class="calc-btn" onclick="digitoCalc('3')">3</button>
-                <button class="calc-btn operador" onclick="igualCalc()">=</button>
-                <button class="calc-btn" onclick="digitoCalc('0')">0</button>
-                <button class="calc-btn" onclick="digitoCalc(',')">,</button>
-            </div>
-            
             <h3>Resetar Todos os Dados</h3>
             <p><strong>ATENÇÃO:</strong> Esta ação é irreversível e apagará todas as transações, categorias e lojas.</p>
             <input type="password" id="senhaReset" placeholder="Senha de Reset">
@@ -600,13 +762,44 @@
 
     </div>
 
+    <!-- Botão do Google Calendar -->
+    <button class="btn-calendar" onclick="abrirGoogleCalendario()" title="Google Calendar">📅</button>
+    
+    <!-- Botão da Calculadora -->
+    <button class="btn-calc" onclick="toggleCalculadora()">🔢</button>
+    
+    <!-- Container da Calculadora -->
+    <div class="calculadora-container" id="calculadoraContainer">
+        <div class="calculadora">
+            <div id="displayCalc">0</div>
+            <button class="calc-btn clear" onclick="limparCalc()">C</button>
+            <button class="calc-btn clear" onclick="apagarCalc()">←</button>
+            <button class="calc-btn operador" onclick="operadorCalc('/')">÷</button>
+            <button class="calc-btn operador" onclick="operadorCalc('*')">×</button>
+            <button class="calc-btn" onclick="digitoCalc('7')">7</button>
+            <button class="calc-btn" onclick="digitoCalc('8')">8</button>
+            <button class="calc-btn" onclick="digitoCalc('9')">9</button>
+            <button class="calc-btn operador" onclick="operadorCalc('-')">-</button>
+            <button class="calc-btn" onclick="digitoCalc('4')">4</button>
+            <button class="calc-btn" onclick="digitoCalc('5')">5</button>
+            <button class="calc-btn" onclick="digitoCalc('6')">6</button>
+            <button class="calc-btn operador" onclick="operadorCalc('+')">+</button>
+            <button class="calc-btn" onclick="digitoCalc('1')">1</button>
+            <button class="calc-btn" onclick="digitoCalc('2')">2</button>
+            <button class="calc-btn" onclick="digitoCalc('3')">3</button>
+            <button class="calc-btn operador" onclick="igualCalc()">=</button>
+            <button class="calc-btn" onclick="digitoCalc('0')">0</button>
+            <button class="calc-btn" onclick="digitoCalc(',')">,</button>
+        </div>
+    </div>
+
     <div id="modalCategorias" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="fecharModalCategorias()">&times;</span>
             <h2>Gerenciar Categorias</h2>
             
-            <div style="display: flex; gap: 20px;">
-                <div style="flex: 1;">
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 250px;">
                     <h3>Nova Categoria</h3>
                     <label for="modalTipo">Tipo:</label>
                     <select id="modalTipo" style="width: 100%;" onchange="carregarCategoriasModal()">
@@ -618,7 +811,7 @@
                     <button class="btn btn-primary" onclick="cadastrarCategoriaModal()">Cadastrar Categoria</button>
                 </div>
                 
-                <div style="flex: 1;">
+                <div style="flex: 1; min-width: 250px;">
                     <h3>Nova Subcategoria</h3>
                     <label for="modalSubCategoriaPai">Categoria Pai:</label>
                     <select id="modalSubCategoriaPai" style="width: 100%;">
@@ -645,6 +838,45 @@
             <h2>Detalhes da Transação Original</h2>
             <div id="detalhesDisplay">
                 </div>
+        </div>
+    </div>
+
+    <div id="modalAjudaRelatorios" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="fecharModalAjuda()">&times;</span>
+            <h2>Como usar os Relatórios e Pesquisas</h2>
+            <div class="ajuda-container">
+                <h3>Filtros Disponíveis</h3>
+                <ul>
+                    <li><strong>Período:</strong> Selecione o período desejado (Mês Atual, Últimos 3 Meses, etc.) ou defina um período personalizado</li>
+                    <li><strong>Tipo:</strong> Filtre por "Despesa", "Receita" ou deixe "Todos" para ver ambos</li>
+                    <li><strong>Categoria:</strong> Selecione uma categoria específica ou deixe "Todas"</li>
+                    <li><strong>Busca:</strong> Pesquise por descrição ou loja/origem</li>
+                </ul>
+                
+                <h3>Status das Transações</h3>
+                <ul>
+                    <li><strong>Pago/Recebido:</strong> Transações já quitadas</li>
+                    <li><strong>A Pagar/A Receber:</strong> Transações pendentes de pagamento</li>
+                    <li><strong>Pendente:</strong> Transações com status indefinido</li>
+                    <li><strong>Vencido/Atrasado:</strong> Transações com data de vencimento passada e não quitadas (destacadas em vermelho)</li>
+                </ul>
+                
+                <h3>Como Pesquisar</h3>
+                <ul>
+                    <li><strong>Para ver apenas transações pagas:</strong> Não há filtro direto, mas você pode identificar pelo status "Pago" ou "Recebido" na tabela</li>
+                    <li><strong>Para ver apenas transações não pagas:</strong> Filtre por status "A Pagar", "A Receber" ou "Pendente"</li>
+                    <li><strong>Para ver transações atrasadas:</strong> Elas aparecem destacadas em vermelho na tabela com status "VENCIDO/ATRASADO"</li>
+                </ul>
+                
+                <h3>Novas Funcionalidades</h3>
+                <ul>
+                    <li><strong>Modificação de Status das Parcelas:</strong> Ao abrir os detalhes de uma transação, você pode modificar o status de cada parcela individualmente</li>
+                    <li><strong>Período Personalizado:</strong> Se deixar as datas em branco no modo personalizado, o sistema pesquisará todas as transações</li>
+                    <li><strong>Privacidade Aprimorada:</strong> O ícone de privacidade agora usa cadeado aberto/fechado e ocupa menos espaço</li>
+                    <li><strong>Resumo do Relatório:</strong> Agora mostra contas a pagar, pendências e saldo disponível</li>
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -783,11 +1015,30 @@
         const toggleButton = document.getElementById('privacidadeToggle');
         const dashboardValues = document.querySelectorAll('.dashboard-valor');
 
-        toggleButton.innerHTML = isPrivacidadeAtiva ? '🔒' : '&#x1f441;'; 
+        toggleButton.innerHTML = isPrivacidadeAtiva ? '🔓' : '🔒'; 
         
         dashboardValues.forEach(p => {
             p.classList.toggle('valor-oculto', isPrivacidadeAtiva);
         });
+    }
+    
+    function toggleCalculadora() {
+        const calcContainer = document.getElementById('calculadoraContainer');
+        calcContainer.style.display = calcContainer.style.display === 'block' ? 'none' : 'block';
+    }
+    
+    function abrirGoogleCalendario() {
+        window.open('https://calendar.google.com', '_blank');
+    }
+
+    // --- FUNÇÕES DE MODAL DE AJUDA ---
+    function abrirModalAjuda() {
+        document.getElementById('modalAjudaRelatorios').style.display = 'block';
+        event.stopPropagation(); // Impede que o clique no ícone abra/feche a seção
+    }
+    
+    function fecharModalAjuda() {
+        document.getElementById('modalAjudaRelatorios').style.display = 'none';
     }
 
     // --- FUNÇÕES DE CATEGORIAS E LOJAS ---
@@ -1147,136 +1398,419 @@
             const dataParcela = new Date(dataInicial.setMonth(dataInicial.getMonth() + i));
 
             const novaTransacao = {
-                id: idOriginal + i, 
-                idOriginal: idOriginal, 
-                // data.toISOString().split('T')[0] garante o formato YYYY-MM-DD
-                data: dataParcela.toISOString().split('T')[0], 
-                nome: lojaTransacao,
-                descricao: (parcelas > 1) ? `${lojaTransacao || categoria} (${i + 1}/${parcelas}) - ${descricaoTransacao}` : descricaoTransacao,
+                id: idOriginal + i,
+                idOriginal: idOriginal,
+                data: dataParcela.toISOString().split('T')[0],
                 tipo: tipo,
                 categoria: categoria,
-                subcategoria: subcategoria,
+                subcategoria: subcategoria || null,
+                loja: lojaTransacao || null,
+                descricao: descricaoTransacao,
                 valor: valorParcela,
-                parcelaAtual: i + 1,
-                totalParcelas: parcelas,
-                status: status 
+                status: status,
+                parcela: i + 1,
+                totalParcelas: parcelas
             };
+
             transacoes.push(novaTransacao);
         }
 
         setTransacoes(transacoes);
         limparFormulario();
         atualizarDashboard();
-        alert(`Transação de ${formatarMoeda(valor)} (${parcelas}x) salva com sucesso!`);
-    }
-
-    function limparFormulario() {
-        document.getElementById('dataTransacao').valueAsDate = null;
-        document.getElementById('tipoTransacao').value = 'despesa';
-        document.getElementById('categoriaTransacao').value = '';
-        document.getElementById('subcategoriaTransacao').value = '';
-        document.getElementById('lojaTransacao').value = '';
-        document.getElementById('descricaoTransacao').value = '';
-        document.getElementById('valorTransacao').value = '';
-        document.getElementById('parcelas').value = '1';
-        atualizarStatusPadrao(); 
-        carregarCategoriasESubcategorias();
+        alert('Transação(ões) salva(s) com sucesso!');
     }
     
-    function excluirTransacao(id) {
-        if (!confirm('Tem certeza que deseja excluir esta transação? O valor dela será revertido (devolvido/retirado) do seu Saldo.')) {
+    function limparFormulario() {
+        document.getElementById('dataTransacao').value = '';
+        document.getElementById('valorTransacao').value = '';
+        document.getElementById('parcelas').value = '1';
+        document.getElementById('lojaTransacao').value = '';
+        document.getElementById('descricaoTransacao').value = '';
+        document.getElementById('subcategoriaTransacao').innerHTML = '<option value="">Selecione uma subcategoria</option>';
+        document.getElementById('categoriaTransacao').value = '';
+        atualizarStatusPadrao();
+    }
+
+    // --- FUNÇÕES DE RELATÓRIO ---
+    
+    function toggleDateFilters() {
+        const periodo = document.getElementById('filtroPeriodo').value;
+        const filtroDataPersonalizada = document.getElementById('filtroDataPersonalizada');
+        const filtroDataPersonalizada2 = document.getElementById('filtroDataPersonalizada2');
+        
+        if (periodo === 'personalizado') {
+            filtroDataPersonalizada.style.display = 'block';
+            filtroDataPersonalizada2.style.display = 'block';
+        } else {
+            filtroDataPersonalizada.style.display = 'none';
+            filtroDataPersonalizada2.style.display = 'none';
+        }
+    }
+    
+    function gerarRelatorio() {
+        const periodo = document.getElementById('filtroPeriodo').value;
+        const tipo = document.getElementById('filtroTipo').value;
+        const categoria = document.getElementById('filtroCategoria').value;
+        const busca = document.getElementById('filtroBusca').value.toLowerCase().trim();
+        
+        let dataInicio, dataFim;
+        
+        // Define o período de datas com base na seleção
+        const hoje = new Date();
+        const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+        
+        switch (periodo) {
+            case 'mes':
+                dataInicio = primeiroDiaMes;
+                dataFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+                break;
+            case '3meses':
+                dataInicio = new Date(hoje.getFullYear(), hoje.getMonth() - 2, 1);
+                dataFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+                break;
+            case '6meses':
+                dataInicio = new Date(hoje.getFullYear(), hoje.getMonth() - 5, 1);
+                dataFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+                break;
+            case '1ano':
+                dataInicio = new Date(hoje.getFullYear() - 1, hoje.getMonth(), 1);
+                dataFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+                break;
+            case 'personalizado':
+                const dataInicioInput = document.getElementById('dataInicio').value;
+                const dataFimInput = document.getElementById('dataFim').value;
+                
+                // Se as datas estiverem vazias, pesquisar todas as transações
+                if (!dataInicioInput && !dataFimInput) {
+                    dataInicio = new Date(1900, 0, 1); // Data muito antiga
+                    dataFim = new Date(2100, 11, 31); // Data muito futura
+                } else {
+                    dataInicio = new Date(dataInicioInput + 'T00:00:00');
+                    dataFim = new Date(dataFimInput + 'T23:59:59');
+                    
+                    if (isNaN(dataInicio.getTime()) || isNaN(dataFim.getTime())) {
+                        alert('Por favor, selecione datas válidas para o período personalizado.');
+                        return;
+                    }
+                }
+                break;
+        }
+        
+        // Converte as datas para formato YYYY-MM-DD para comparação
+        const dataInicioStr = dataInicio.toISOString().split('T')[0];
+        const dataFimStr = dataFim.toISOString().split('T')[0];
+        
+        // Obtém todas as transações
+        const todasTransacoes = getTransacoes();
+        
+        // Filtra as transações com base nos critérios
+        const transacoesFiltradas = todasTransacoes.filter(t => {
+            // Verifica se a transação está dentro do período
+            if (t.data < dataInicioStr || t.data > dataFimStr) {
+                return false;
+            }
+            
+            // Verifica o tipo
+            if (tipo && t.tipo !== tipo) {
+                return false;
+            }
+            
+            // Verifica a categoria
+            if (categoria && t.categoria !== categoria) {
+                return false;
+            }
+            
+            // Verifica a busca (descrição ou loja)
+            if (busca && 
+                !t.descricao.toLowerCase().includes(busca) && 
+                !(t.loja && t.loja.toLowerCase().includes(busca))) {
+                return false;
+            }
+            
+            return true;
+        });
+        
+        // Ordena as transações por data (mais recentes primeiro)
+        transacoesFiltradas.sort((a, b) => new Date(b.data) - new Date(a.data));
+        
+        // Calcula os totais para o resumo do relatório
+        let contasAPagar = 0;
+        let pendencias = 0;
+        let saldoDisponivel = 0;
+        
+        // Calcula o saldo disponível (todas as transações quitadas)
+        todasTransacoes.forEach(t => {
+            if (t.status === 'Pago' || t.status === 'Recebido') {
+                if (t.tipo === 'receita') {
+                    saldoDisponivel += t.valor;
+                } else {
+                    saldoDisponivel -= t.valor;
+                }
+            }
+        });
+        
+        // Calcula contas a pagar e pendências (apenas das transações filtradas)
+        transacoesFiltradas.forEach(t => {
+            if (t.tipo === 'despesa' && t.status === 'A Pagar') {
+                contasAPagar++;
+            }
+            
+            if (t.status === 'Pendente') {
+                pendencias++;
+            }
+        });
+        
+        // Atualiza o resumo do relatório
+        document.getElementById('contasAPagarRelatorio').textContent = contasAPagar;
+        document.getElementById('pendenciasRelatorio').textContent = pendencias;
+        document.getElementById('saldoDisponivelRelatorio').textContent = formatarMoeda(saldoDisponivel);
+        
+        // Atualiza a classe do saldo disponível
+        const saldoElement = document.getElementById('saldoDisponivelRelatorio');
+        saldoElement.classList.remove('soma-positiva', 'soma-negativa', 'soma-neutra');
+        if (saldoDisponivel > 0) {
+            saldoElement.classList.add('soma-positiva');
+        } else if (saldoDisponivel < 0) {
+            saldoElement.classList.add('soma-negativa');
+        } else {
+            saldoElement.classList.add('soma-neutra');
+        }
+        
+        // Atualiza a tabela
+        const tbody = document.getElementById('tabelaRelatorioBody');
+        tbody.innerHTML = '';
+        
+        if (transacoesFiltradas.length === 0) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = '<td colspan="8" style="text-align: center;">Nenhuma transação encontrada com os filtros selecionados.</td>';
+            tbody.appendChild(tr);
             return;
         }
         
-        let transacoes = getTransacoes();
-        transacoes = transacoes.filter(t => t.id !== id);
-        
-        setTransacoes(transacoes);
-        atualizarDashboard();
-        gerarRelatorio(); 
+        transacoesFiltradas.forEach(t => {
+            const tr = document.createElement('tr');
+            
+            // Verifica se a transação está vencida
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
+            const dataVencimento = new Date(t.data + 'T00:00:00');
+            const isVencida = dataVencimento < hoje && 
+                             ((t.tipo === 'despesa' && t.status !== 'Pago') || 
+                              (t.tipo === 'receita' && t.status !== 'Recebido'));
+            
+            if (isVencida) {
+                tr.classList.add('status-vencido');
+            } else if (t.status === 'Pendente') {
+                tr.classList.add('status-pendente');
+            }
+            
+            // Formata a descrição para incluir informações de parcelamento
+            let descricaoFormatada = t.descricao;
+            if (t.totalParcelas > 1) {
+                descricaoFormatada += ` (${t.parcela}/${t.totalParcelas})`;
+            }
+            
+            tr.innerHTML = `
+                <td>${t.data.split('-').reverse().join('/')}</td>
+                <td>${descricaoFormatada}</td>
+                <td>${t.tipo === 'despesa' ? 'Despesa' : 'Receita'}</td>
+                <td>${t.categoria}</td>
+                <td>${t.subcategoria || '-'}</td>
+                <td>${formatarMoeda(t.valor)}</td>
+                <td>${t.status}${isVencida ? ' (Vencido)' : ''}</td>
+                <td>
+                    <button class="btn btn-info" style="padding: 3px 6px; font-size: 0.8em; margin-right: 5px;" onclick="verDetalhesTransacao(${t.idOriginal})">Detalhes</button>
+                    <button class="btn btn-danger" style="padding: 3px 6px; font-size: 0.8em;" onclick="excluirTransacao(${t.id})">Excluir</button>
+                </td>
+            `;
+            
+            tbody.appendChild(tr);
+        });
     }
-
-    function alterarStatus(id, novoStatus) {
-        if (!confirm('Deseja realmente alterar o status desta transação?')) {
+    
+    function verDetalhesTransacao(idOriginal) {
+        const transacoes = getTransacoes();
+        const transacoesOriginais = transacoes.filter(t => t.idOriginal === idOriginal);
+        
+        if (transacoesOriginais.length === 0) {
+            alert('Transação não encontrada.');
             return;
         }
         
-        let transacoes = getTransacoes();
-        const transacaoIndex = transacoes.findIndex(t => t.id === id);
+        const display = document.getElementById('detalhesDisplay');
+        display.innerHTML = '';
         
-        if (transacaoIndex !== -1) {
-            transacoes[transacaoIndex].status = novoStatus;
-            setTransacoes(transacoes);
-            atualizarDashboard();
-            gerarRelatorio();
-        }
-    }
-
-    function abrirModalDetalhes() {
+        const t = transacoesOriginais[0]; // Pega a primeira parcela como referência
+        
+        let html = `
+            <div class="form-row">
+                <div>
+                    <label><strong>Tipo:</strong></label>
+                    <p>${t.tipo === 'despesa' ? 'Despesa' : 'Receita'}</p>
+                </div>
+                <div>
+                    <label><strong>Categoria:</strong></label>
+                    <p>${t.categoria}</p>
+                </div>
+                <div>
+                    <label><strong>Subcategoria:</strong></label>
+                    <p>${t.subcategoria || '-'}</p>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div>
+                    <label><strong>Loja/Origem:</strong></label>
+                    <p>${t.loja || '-'}</p>
+                </div>
+                <div>
+                    <label><strong>Descrição:</strong></label>
+                    <p>${t.descricao}</p>
+                </div>
+                <div>
+                    <label><strong>Valor Total:</strong></label>
+                    <p>${formatarMoeda(t.valor * t.totalParcelas)}</p>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div>
+                    <label><strong>Número de Parcelas:</strong></label>
+                    <p>${t.totalParcelas}</p>
+                </div>
+                <div>
+                    <label><strong>Valor por Parcela:</strong></label>
+                    <p>${formatarMoeda(t.valor)}</p>
+                </div>
+            </div>
+            
+            <h3>Parcelas</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parcela</th>
+                            <th>Data de Vencimento</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        `;
+        
+        transacoesOriginais.forEach(parcela => {
+            // Verifica se a parcela está vencida
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
+            const dataVencimento = new Date(parcela.data + 'T00:00:00');
+            const isVencida = dataVencimento < hoje && 
+                             ((parcela.tipo === 'despesa' && parcela.status !== 'Pago') || 
+                              (parcela.tipo === 'receita' && parcela.status !== 'Recebido'));
+            
+            html += `
+                <tr ${isVencida ? 'class="status-vencido"' : ''}>
+                    <td>${parcela.parcela}/${parcela.totalParcelas}</td>
+                    <td>${parcela.data.split('-').reverse().join('/')}</td>
+                    <td>${formatarMoeda(parcela.valor)}</td>
+                    <td>${parcela.status}${isVencida ? ' (Vencido)' : ''}</td>
+                    <td>
+                        <select class="parcela-status-select" onchange="atualizarStatusParcela(${parcela.id}, this.value)">
+            `;
+            
+            // Adiciona as opções de status conforme o tipo
+            if (parcela.tipo === 'despesa') {
+                html += `
+                    <option value="A Pagar" ${parcela.status === 'A Pagar' ? 'selected' : ''}>A Pagar</option>
+                    <option value="Pendente" ${parcela.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
+                    <option value="Pago" ${parcela.status === 'Pago' ? 'selected' : ''}>Pago</option>
+                `;
+            } else {
+                html += `
+                    <option value="A Receber" ${parcela.status === 'A Receber' ? 'selected' : ''}>A Receber</option>
+                    <option value="Pendente" ${parcela.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
+                    <option value="Recebido" ${parcela.status === 'Recebido' ? 'selected' : ''}>Recebido</option>
+                `;
+            }
+            
+            html += `
+                        </select>
+                    </td>
+                </tr>
+            `;
+        });
+        
+        html += `
+                    </tbody>
+                </table>
+            </div>
+        `;
+        
+        display.innerHTML = html;
         document.getElementById('modalDetalhesTransacao').style.display = 'block';
+    }
+    
+    function atualizarStatusParcela(parcelaId, novoStatus) {
+        if (!confirm('Deseja realmente alterar o status desta parcela?')) {
+            // Recarrega os detalhes para manter o status anterior
+            const transacoes = getTransacoes();
+            const parcela = transacoes.find(t => t.id === parcelaId);
+            if (parcela) {
+                verDetalhesTransacao(parcela.idOriginal);
+            }
+            return;
+        }
+        
+        let transacoes = getTransacoes();
+        const parcelaIndex = transacoes.findIndex(t => t.id === parcelaId);
+        
+        if (parcelaIndex !== -1) {
+            transacoes[parcelaIndex].status = novoStatus;
+            setTransacoes(transacoes);
+            
+            // Atualiza o dashboard e relatórios
+            atualizarDashboard();
+            
+            // Se o relatório estiver aberto, atualiza-o
+            if (document.getElementById('relatorioContent').classList.contains('expanded')) {
+                gerarRelatorio();
+            }
+            
+            // Recarrega os detalhes da transação
+            verDetalhesTransacao(transacoes[parcelaIndex].idOriginal);
+            
+            alert('Status da parcela atualizado com sucesso!');
+        }
     }
     
     function fecharModalDetalhes() {
         document.getElementById('modalDetalhesTransacao').style.display = 'none';
     }
-
-    function detalharTransacaoOriginal(idOriginal) {
-        const todasTransacoes = getTransacoes();
-        const transacoesDoGrupo = todasTransacoes.filter(t => t.idOriginal === idOriginal);
+    
+    function excluirTransacao(id) {
+        if (!confirm('Tem certeza que deseja excluir esta transação?')) {
+            return;
+        }
         
-        if (transacoesDoGrupo.length === 0) return;
-
-        const original = transacoesDoGrupo[0];
-        const valorTotal = original.valor * original.totalParcelas;
-        const detalhesDisplay = document.getElementById('detalhesDisplay');
+        let transacoes = getTransacoes();
+        transacoes = transacoes.filter(t => t.id !== id);
+        setTransacoes(transacoes);
         
-        // Encontrar a descrição original (sem a parte da parcela)
-        const descricaoBase = original.descricao.replace(/\s\(\d+\/\d+\)/, '');
-
-        let html = `
-            <p><strong>Tipo:</strong> <span style="font-weight: bold; color: ${original.tipo === 'receita' ? '#28a745' : '#dc3545'};">${original.tipo.toUpperCase()}</span></p>
-            <p><strong>Descrição:</strong> ${descricaoBase}</p>
-            <p><strong>Loja/Origem:</strong> ${original.nome || 'N/A'}</p>
-            <p><strong>Categoria:</strong> ${original.categoria} / ${original.subcategoria || '-'}</p>
-            <p><strong>Valor Total:</strong> <strong>${formatarMoeda(valorTotal)}</strong></p>
-            <p><strong>Parcelas:</strong> ${original.totalParcelas}</p>
-            <p><strong>Valor/Parcela:</strong> ${formatarMoeda(original.valor)}</p>
-            
-            <h3>Status das Parcelas</h3>
-            <ul id="parcelasList" style="list-style-type: none; padding-left: 0;">
-        `;
-
-        transacoesDoGrupo.sort((a, b) => new Date(a.data) - new Date(b.data)).forEach(p => {
-            const dataVencimento = new Date(p.data + 'T00:00:00');
-            const hoje = new Date();
-            hoje.setHours(0, 0, 0, 0); 
-            
-            const isVencida = dataVencimento < hoje && p.status !== 'Pago' && p.status !== 'Recebido';
-
-            let statusDisplay = p.status;
-            let statusColor = '#6c757d'; // Neutro
-            
-            if (isVencida) {
-                statusDisplay = 'VENCIDO/ATRASADO';
-                statusColor = '#dc3545';
-            } else if (p.status === 'Pendente') {
-                statusColor = '#ffc107'; 
-            } else if (p.status === 'Pago' || p.status === 'Recebido') {
-                statusColor = '#28a745';
-            }
-            
-            html += `
-                <li style="border-bottom: 1px dotted #eee; padding: 5px 0;">
-                    ${p.parcelaAtual}/${p.totalParcelas} | Vencimento: ${p.data} | Valor: ${formatarMoeda(p.valor)} | 
-                    Status: <strong style="color: ${statusColor};">${statusDisplay}</strong>
-                </li>
-            `;
-        });
-
-        html += `</ul>`;
+        // Se a transação excluída era a última parcela, remove também a referência ao idOriginal
+        const transacoesRestantes = transacoes.filter(t => t.idOriginal === id);
+        if (transacoesRestantes.length === 0) {
+            // Não há mais parcelas, nada mais a fazer
+        }
         
-        detalhesDisplay.innerHTML = html;
-        abrirModalDetalhes();
+        atualizarDashboard();
+        
+        // Se o relatório estiver aberto, atualiza-o
+        if (document.getElementById('relatorioContent').classList.contains('expanded')) {
+            gerarRelatorio();
+        }
+        
+        alert('Transação excluída com sucesso!');
     }
 
     // --- FUNÇÕES DE DASHBOARD ---
@@ -1284,10 +1818,15 @@
     function atualizarDashboard() {
         const transacoes = getTransacoes();
         const hoje = new Date();
-        hoje.setHours(0, 0, 0, 0); 
-        const mesAtual = hoje.getMonth();
-        const anoAtual = hoje.getFullYear();
+        const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+        const ultimoDiaMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
         
+        // Formata as datas para comparação
+        const hojeStr = hoje.toISOString().split('T')[0];
+        const primeiroDiaMesStr = primeiroDiaMes.toISOString().split('T')[0];
+        const ultimoDiaMesStr = ultimoDiaMes.toISOString().split('T')[0];
+        
+        // Inicializa os contadores
         let saldoAtual = 0;
         let receitasMes = 0;
         let despesasMes = 0;
@@ -1295,38 +1834,51 @@
         let aReceberCount = 0;
         let pendentesCount = 0;
         let pagosRecebidosCount = 0;
+        let vencidasCount = 0;
         
+        // Itera sobre as transações para calcular os valores
         transacoes.forEach(t => {
-            const dataTransacao = new Date(t.data + 'T00:00:00');
-            
-            // CÁLCULO DO SALDO ATUAL (Só contas quitadas)
-            if (t.status === 'Recebido') {
-                saldoAtual += t.valor;
-            } else if (t.status === 'Pago') {
-                saldoAtual -= t.valor;
+            // Saldo atual (apenas transações quitadas)
+            if (t.status === 'Pago' || t.status === 'Recebido') {
+                if (t.tipo === 'receita') {
+                    saldoAtual += t.valor;
+                } else {
+                    saldoAtual -= t.valor;
+                }
+                pagosRecebidosCount++;
             }
-
-            // CÁLCULO DE RECEITAS/DESPESAS NO MÊS (Quitadas no mês de competência)
-            if (dataTransacao.getMonth() === mesAtual && dataTransacao.getFullYear() === anoAtual) {
-                if (t.status === 'Recebido') {
+            
+            // Receitas e despesas do mês (apenas quitadas)
+            if (t.data >= primeiroDiaMesStr && t.data <= ultimoDiaMesStr) {
+                if (t.tipo === 'receita' && t.status === 'Recebido') {
                     receitasMes += t.valor;
-                } else if (t.status === 'Pago') {
+                } else if (t.tipo === 'despesa' && t.status === 'Pago') {
                     despesasMes += t.valor;
                 }
             }
             
-            // CONTAGEM POR STATUS
-            if (t.status === 'A Pagar') {
+            // Contas a pagar e a receber
+            if (t.tipo === 'despesa' && t.status === 'A Pagar') {
                 aPagarCount++;
-            } else if (t.status === 'A Receber') {
+            } else if (t.tipo === 'receita' && t.status === 'A Receber') {
                 aReceberCount++;
-            } else if (t.status === 'Pendente') {
+            }
+            
+            // Pendentes
+            if (t.status === 'Pendente') {
                 pendentesCount++;
-            } else if (t.status === 'Pago' || t.status === 'Recebido') {
-                pagosRecebidosCount++;
+            }
+            
+            // Vencidas
+            if (t.data < hojeStr) {
+                if ((t.tipo === 'despesa' && t.status !== 'Pago') || 
+                    (t.tipo === 'receita' && t.status !== 'Recebido')) {
+                    vencidasCount++;
+                }
             }
         });
-
+        
+        // Atualiza os valores no dashboard
         document.getElementById('saldoAtual').textContent = formatarMoeda(saldoAtual);
         document.getElementById('receitasMes').textContent = formatarMoeda(receitasMes);
         document.getElementById('despesasMes').textContent = formatarMoeda(despesasMes);
@@ -1334,8 +1886,9 @@
         document.getElementById('aReceberCount').textContent = aReceberCount;
         document.getElementById('pendentesCount').textContent = pendentesCount;
         document.getElementById('pagosRecebidosCount').textContent = pagosRecebidosCount;
-
-        // Atualiza a classe de cor do saldo
+        document.getElementById('vencidasCount').textContent = vencidasCount;
+        
+        // Atualiza as classes dos valores
         const saldoElement = document.getElementById('saldoAtual');
         saldoElement.classList.remove('soma-positiva', 'soma-negativa', 'soma-neutra');
         if (saldoAtual > 0) {
@@ -1345,168 +1898,40 @@
         } else {
             saldoElement.classList.add('soma-neutra');
         }
-    }
-
-    // --- FUNÇÕES DE RELATÓRIO ---
-    
-    function toggleDateFilters() {
-        const periodo = document.getElementById('filtroPeriodo').value;
-        const divDataInicio = document.getElementById('filtroDataPersonalizada');
-        const divDataFim = document.getElementById('filtroDataPersonalizada2');
         
-        if (periodo === 'personalizado') {
-            divDataInicio.style.display = 'block';
-            divDataFim.style.display = 'block';
-        } else {
-            divDataInicio.style.display = 'none';
-            divDataFim.style.display = 'none';
-        }
-    }
-    
-    function gerarRelatorio() {
-        const transacoes = getTransacoes();
-        const periodo = document.getElementById('filtroPeriodo').value;
-        const tipoFiltro = document.getElementById('filtroTipo').value;
-        const categoriaFiltro = document.getElementById('filtroCategoria').value;
-        const buscaFiltro = document.getElementById('filtroBusca').value.toLowerCase();
-        
-        let dataInicio, dataFim;
-        const hoje = new Date();
-        
-        if (periodo === 'mes') {
-            dataInicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-            dataFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
-        } else if (periodo === '3meses') {
-            dataInicio = new Date(hoje.getFullYear(), hoje.getMonth() - 2, 1);
-            dataFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
-        } else if (periodo === '6meses') {
-            dataInicio = new Date(hoje.getFullYear(), hoje.getMonth() - 5, 1);
-            dataFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
-        } else if (periodo === '1ano') {
-            dataInicio = new Date(hoje.getFullYear() - 1, hoje.getMonth(), 1);
-            dataFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
-        } else if (periodo === 'personalizado') {
-            dataInicio = new Date(document.getElementById('dataInicio').value + 'T00:00:00');
-            dataFim = new Date(document.getElementById('dataFim').value + 'T00:00:00');
-        }
-        
-        // Verifica se as datas são válidas
-        if (isNaN(dataInicio) || isNaN(dataFim)) {
-            alert('Por favor, selecione um período válido.');
-            return;
-        }
-        
-        let somaReceitas = 0;
-        let somaDespesas = 0;
-        const tbody = document.getElementById('tabelaRelatorioBody');
-        tbody.innerHTML = '';
-        
-        const transacoesFiltradas = transacoes.filter(t => {
-            const dataTransacao = new Date(t.data + 'T00:00:00');
-            const noPeriodo = dataTransacao >= dataInicio && dataTransacao <= dataFim;
-            const tipoOk = !tipoFiltro || t.tipo === tipoFiltro;
-            const categoriaOk = !categoriaFiltro || t.categoria === categoriaFiltro;
-            const buscaOk = !buscaFiltro || 
-                           t.descricao.toLowerCase().includes(buscaFiltro) || 
-                           (t.nome && t.nome.toLowerCase().includes(buscaFiltro));
-            
-            return noPeriodo && tipoOk && categoriaOk && buscaOk;
-        });
-        
-        // Ordena por data
-        transacoesFiltradas.sort((a, b) => new Date(a.data) - new Date(b.data));
-        
-        transacoesFiltradas.forEach(t => {
-            const dataVencimento = new Date(t.data + 'T00:00:00');
-            const hoje = new Date();
-            hoje.setHours(0, 0, 0, 0);
-            
-            // Verifica se está vencida
-            const isVencida = dataVencimento < hoje && t.status !== 'Pago' && t.status !== 'Recebido';
-            
-            // Soma para o resumo
-            if (t.status === 'Recebido') {
-                somaReceitas += t.valor;
-            } else if (t.status === 'Pago') {
-                somaDespesas += t.valor;
-            }
-            
-            // Cria a linha da tabela
-            const tr = document.createElement('tr');
-            
-            // Aplica classe especial se estiver vencida
-            if (isVencida) {
-                tr.classList.add('status-vencido');
-            }
-            
-            // Células da tabela
-            tr.innerHTML = `
-                <td>${t.data}</td>
-                <td>${t.descricao}</td>
-                <td>${t.tipo}</td>
-                <td>${t.categoria}</td>
-                <td>${t.subcategoria || '-'}</td>
-                <td>${formatarMoeda(t.valor)}</td>
-                <td>${isVencida ? 'VENCIDO/ATRASADO' : t.status}</td>
-                <td>
-                    <button class="btn btn-info" style="padding: 3px 6px; font-size: 0.8em; margin-right: 5px;" onclick="detalharTransacaoOriginal(${t.idOriginal})">Detalhes</button>
-                    <select onchange="alterarStatus(${t.id}, this.value)" style="padding: 3px; font-size: 0.8em;">
-                        ${t.tipo === 'despesa' ? 
-                            `<option value="A Pagar" ${t.status === 'A Pagar' ? 'selected' : ''}>A Pagar</option>
-                             <option value="Pendente" ${t.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
-                             <option value="Pago" ${t.status === 'Pago' ? 'selected' : ''}>Pago</option>` :
-                            `<option value="A Receber" ${t.status === 'A Receber' ? 'selected' : ''}>A Receber</option>
-                             <option value="Pendente" ${t.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
-                             <option value="Recebido" ${t.status === 'Recebido' ? 'selected' : ''}>Recebido</option>`
-                        }
-                    </select>
-                    <button class="btn btn-danger" style="padding: 3px 6px; font-size: 0.8em; margin-left: 5px;" onclick="excluirTransacao(${t.id})">Excluir</button>
-                </td>
-            `;
-            
-            tbody.appendChild(tr);
-        });
-        
-        // Atualiza o resumo
-        document.getElementById('somaReceitas').textContent = formatarMoeda(somaReceitas);
-        document.getElementById('somaDespesas').textContent = formatarMoeda(somaDespesas);
-        document.getElementById('saldoRelatorio').textContent = formatarMoeda(somaReceitas - somaDespesas);
-        
-        // Atualiza a classe de cor do saldo do relatório
-        const saldoRelatorioElement = document.getElementById('saldoRelatorio');
-        saldoRelatorioElement.classList.remove('soma-positiva', 'soma-negativa', 'soma-neutra');
-        if (somaReceitas - somaDespesas > 0) {
-            saldoRelatorioElement.classList.add('soma-positiva');
-        } else if (somaReceitas - somaDespesas < 0) {
-            saldoRelatorioElement.classList.add('soma-negativa');
-        } else {
-            saldoRelatorioElement.classList.add('soma-neutra');
+        // Aplica a privacidade se estiver ativa
+        if (isPrivacidadeAtiva) {
+            document.querySelectorAll('.dashboard-valor').forEach(p => {
+                p.classList.add('valor-oculto');
+            });
         }
     }
 
-    // --- FUNÇÕES DE RESET ---
+    // --- FUNÇÕES DE CONFIGURAÇÃO ---
     
     function resetarDados() {
         const senha = document.getElementById('senhaReset').value;
         
         if (senha !== PASS_RESET) {
-            alert('Senha incorreta!');
+            alert('Senha incorreta. Ação cancelada.');
             return;
         }
         
-        if (!confirm('ATENÇÃO: Esta ação é irreversível e apagará TODOS os seus dados. Deseja continuar?')) {
+        if (!confirm('ATENÇÃO: Esta ação é IRREVERSÍVEL e apagará TODOS os seus dados.\n\nDeseja realmente continuar?')) {
             return;
         }
         
+        if (!confirm('Último aviso: Todos os dados serão perdidos permanentemente.\n\nTem certeza?')) {
+            return;
+        }
+        
+        // Limpa todos os dados
         localStorage.removeItem('transacoes');
         localStorage.removeItem('categorias');
         localStorage.removeItem('lojas');
         
-        document.getElementById('senhaReset').value = '';
-        atualizarDashboard();
-        gerarRelatorio();
-        carregarCategoriasESubcategorias();
-        carregarLojas();
+        // Recarrega a página
+        location.reload();
         
         alert('Todos os dados foram resetados com sucesso!');
     }
@@ -1528,12 +1953,12 @@
     }
     
     function operadorCalc(proximoOperador) {
-        const valorInput = parseFloat(displayValue.replace(',', '.'));
+        const valorDisplay = parseFloat(displayValue.replace(',', '.'));
         
         if (primeiroOperando === null) {
-            primeiroOperando = valorInput;
+            primeiroOperando = valorDisplay;
         } else if (operadorPendente) {
-            const resultado = realizarCalculo();
+            const resultado = calcular(primeiroOperando, valorDisplay, operadorPendente);
             displayValue = String(resultado).replace('.', ',');
             primeiroOperando = resultado;
             atualizarDisplay();
@@ -1543,31 +1968,32 @@
         operadorPendente = proximoOperador;
     }
     
-    function igualCalc() {
-        if (operadorPendente === null || primeiroOperando === null) return;
-        
-        const resultado = realizarCalculo();
-        displayValue = String(resultado).replace('.', ',');
-        primeiroOperando = null;
-        operadorPendente = null;
-        aguardandoSegundoOperando = false;
-        atualizarDisplay();
+    function calcular(primeiroOperando, segundoOperando, operador) {
+        switch (operador) {
+            case '+':
+                return primeiroOperando + segundoOperando;
+            case '-':
+                return primeiroOperando - segundoOperando;
+            case '*':
+                return primeiroOperando * segundoOperando;
+            case '/':
+                return primeiroOperando / segundoOperando;
+            default:
+                return segundoOperando;
+        }
     }
     
-    function realizarCalculo() {
-        const segundoOperando = parseFloat(displayValue.replace(',', '.'));
+    function igualCalc() {
+        const valorDisplay = parseFloat(displayValue.replace(',', '.'));
         
-        if (operadorPendente === '+') {
-            return primeiroOperando + segundoOperando;
-        } else if (operadorPendente === '-') {
-            return primeiroOperando - segundoOperando;
-        } else if (operadorPendente === '*') {
-            return primeiroOperando * segundoOperando;
-        } else if (operadorPendente === '/') {
-            return primeiroOperando / segundoOperando;
+        if (primeiroOperando !== null && operadorPendente) {
+            const resultado = calcular(primeiroOperando, valorDisplay, operadorPendente);
+            displayValue = String(resultado).replace('.', ',');
+            primeiroOperando = null;
+            operadorPendente = null;
+            aguardandoSegundoOperando = false;
+            atualizarDisplay();
         }
-        
-        return segundoOperando;
     }
     
     function limparCalc() {
@@ -1579,23 +2005,28 @@
     }
     
     function apagarCalc() {
-        displayValue = displayValue.slice(0, -1) || '0';
+        if (displayValue.length > 1) {
+            displayValue = displayValue.slice(0, -1);
+        } else {
+            displayValue = '0';
+        }
         atualizarDisplay();
     }
 
     // --- INICIALIZAÇÃO ---
     
-    document.addEventListener('DOMContentLoaded', function() {
-        // Inicializa o sistema
+    // Quando a página carregar
+    window.onload = function() {
+        // Inicializa os componentes
         atualizarStatusPadrao();
         carregarCategoriasESubcategorias();
         carregarLojas();
         atualizarDashboard();
-        gerarRelatorio();
         
-        // Define a data atual como padrão
-        document.getElementById('dataTransacao').valueAsDate = new Date();
-    });
+        // Define a data atual como padrão no campo de data
+        const hoje = new Date().toISOString().split('T')[0];
+        document.getElementById('dataTransacao').value = hoje;
+    };
 </script>
 
 </body>
